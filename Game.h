@@ -19,6 +19,7 @@ public:
     void updatePollEvents();
 
 
+
 private:
     sf::RenderWindow* window;
 
