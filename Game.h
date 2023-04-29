@@ -3,6 +3,8 @@
 //
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "Player.h"
+
 #ifndef PROYECTO2DATOSII_GAME_H
 #define PROYECTO2DATOSII_GAME_H
 
@@ -22,7 +24,8 @@ public:
 
 private:
     sf::RenderWindow* window;
-
+    void initPlayer();
+    Player * player;
 
 };
 
