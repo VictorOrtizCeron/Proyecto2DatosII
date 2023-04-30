@@ -25,7 +25,11 @@ public:
 private:
     sf::RenderWindow* window;
     void initPlayer();
+    void initMap();
     Player * player;
+
+
+
 
 };
 

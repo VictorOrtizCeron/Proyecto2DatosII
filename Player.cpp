@@ -7,7 +7,7 @@
 
 void Player::initVariables()
 {
-    this->movementSpeed = 1.f;
+    this->movementSpeed = 3.f;
 
 }
 Player::Player(){
@@ -20,7 +20,7 @@ Player::~Player() {
 
 }
 void Player::initTexture() {
-    circulo.setRadius(30.f);
+    circulo.setRadius(20.f);
     circulo.setFillColor(sf::Color::Yellow);
     circulo.setPosition(400.f-50.f,400.f-50.f);
 
