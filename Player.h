@@ -1,0 +1,28 @@
+//
+// Created by vortizc on 4/29/23.
+//
+#include <SFML/Graphics.hpp>
+#ifndef PROYECTO2DATOSII_PLAYER_H
+#define PROYECTO2DATOSII_PLAYER_H
+
+
+class Player {
+public:
+    Player();
+    virtual ~Player();
+    const sf::Vector2f& getPos() const;
+    const  sf::FloatRect getBounds() const;
+    void move(const float dirX, const float dirY);
+    void update();
+    void render(sf::RenderTarget& target);
+private:
+    sf::CircleShape circulo;
+
+    float movementSpeed;
+    void initVariables();
+    void initTexture();
+
+};
+
+
+#endif //PROYECTO2DATOSII_PLAYER_H
