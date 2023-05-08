@@ -12,6 +12,7 @@ void Game::initWindow() {
 }
 
 void Game::initMap() {
+    this->POINTS = new PointLinkedList();
 
     int tileMap[10][10] = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -38,7 +39,10 @@ void Game::initMap() {
             } else {
                 this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
                 this->TILE_MAP[y][x].setFillColor(sf::Color::Black);
-                POINTS[y][x].setPosition(x*TILE_SIZE+27.5,y*TILE_SIZE+27.5);
+                Point * newPoint = new Point();
+                newPoint->setPosition(x*TILE_SIZE+27.5,y*TILE_SIZE+27.5);
+
+                POINTS->addFirst(newPoint);
 
             }
             this->TILE_MAP[y][x].setPosition(x * TILE_SIZE, y * TILE_SIZE);
@@ -53,8 +57,6 @@ void Game::renderMap() {
     for (int y = 0; y < 10; y++) {
         for (int x = 0; x < 10; x++) {
             this->window->draw(this->TILE_MAP[y][x]);
-
-
         }
     }
 }
@@ -117,22 +119,9 @@ void Game::updateMap() {
 
 void Game::updatePoints() {
 
-    for (int y = 0; y < 10; y++) {
-        for (int x = 0; x < 10; x++) {
-            //does something
-        }
-    }
+
 }
-void Game::renderPoints() {
-    for (int y = 0; y < 10; y++) {
-        for (int x = 0; x < 10; x++) {
-            if(&POINTS[y][x] != nullptr){
-                std::cout<< "renders point"<<std::endl;
-                POINTS[y][x].render(*this->window);
-            }
-        }
-    }
-}
+
 void Game::initPlayer() {
     this->player = new Player();
 }
@@ -251,7 +240,7 @@ void Game::render() {
     this->window->clear();
     this->renderMap();
     this->player->render(*this->window);
-    this->renderPoints();
+    this->POINTS->renderPointList(*this->window);
     this->window->display();
 }
 

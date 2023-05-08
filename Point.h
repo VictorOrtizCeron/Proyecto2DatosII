@@ -20,9 +20,9 @@ public:
 
     void setPosition(float x, float y);
     void render(sf::RenderTarget &target);
-
-private:
     sf::CircleShape circulo;
+private:
+
 
     float xPos;
     float yPos;

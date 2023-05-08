@@ -5,6 +5,8 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include "Point.h"
+#include "PointNode.h"
+#include "PointLinkedList.h"
 #ifndef PROYECTO2DATOSII_GAME_H
 #define PROYECTO2DATOSII_GAME_H
 
@@ -22,18 +24,20 @@ public:
     void renderMap();
     void updateMap();
     void updatePoints();
-    void renderPoints();
+
 
 private:
     sf::RenderWindow* window;
     void initPlayer();
     void initMap();
+    void initPOINTS();
     Player * player;
     static const int ROWS = 10;
     static const int COLS = 10;
     static const int points = 100;
     sf::RectangleShape TILE_MAP[ROWS][COLS];
-    Point POINTS[ROWS][COLS];
+    PointLinkedList* POINTS;
+
 
     bool isMovingUp ;
     bool isMovingDown ;
