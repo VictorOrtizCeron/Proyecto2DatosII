@@ -36,24 +36,26 @@ void PointLinkedList::removeFirst() {
     }
 }
 
-void PointLinkedList::removePoint(Point *pointToRemove) {
+Point* PointLinkedList::removePoint(Point *pointToRemove) {
 
     PointNode *current=this->head;
     PointNode * previous = nullptr;
 
     while(current != nullptr){
         if(current->point == pointToRemove){
-            PointNode * Temp = current;
+
             if(previous == nullptr){
                 this->head = current->nextPoint;
-                delete Temp;
+
                 size--;
+                return current->point;
 
             }
             else{
                 previous->nextPoint = current->nextPoint;
-                delete Temp;
+
                 size--;
+                return current->point;
             }
         }
         previous = current;

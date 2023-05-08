@@ -119,6 +119,18 @@ void Game::updateMap() {
 
 void Game::updatePoints() {
 
+    PointNode * current = this->POINTS->head;
+
+    while(current != nullptr){
+
+
+        if(current->point->getBounds().intersects(this->player->getBounds())){
+            Point * pointPTR = POINTS->removePoint(current->point);
+            delete pointPTR;
+
+        }
+        current = current->nextPoint;
+    }
 
 }
 
@@ -233,6 +245,7 @@ void Game::update() {
     this->updateInput();
     //this->player->update();
     this->updateMap();
+    this->updatePoints();
 
 }
 

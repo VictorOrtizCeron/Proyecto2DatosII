@@ -12,7 +12,7 @@ public:
     PointLinkedList();
     ~PointLinkedList();
     void addFirst(Point * point);
-    void removePoint(Point * pointToRemove);
+    Point* removePoint(Point * pointToRemove);
     void removeFirst();
     int size;
     PointNode * head;

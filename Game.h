@@ -37,7 +37,7 @@ private:
     static const int points = 100;
     sf::RectangleShape TILE_MAP[ROWS][COLS];
     PointLinkedList* POINTS;
-
+    int PointCount;
 
     bool isMovingUp ;
     bool isMovingDown ;
