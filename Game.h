@@ -30,7 +30,10 @@ private:
     Player * player;
     static const int ROWS = 10;
     static const int COLS = 10;
+    static const int points = 100;
     sf::RectangleShape TILE_MAP[ROWS][COLS];
+    sf::CircleShape POINTS[100];
+
     bool isMovingUp ;
     bool isMovingDown ;
     bool isMovingLeft ;
