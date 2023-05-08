@@ -13,35 +13,99 @@ void Game::initWindow(){
 void Game::initMap(){
 
     int tileMap[10][10] = {
-            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-            {1, 0, 1, 0, 0, 0, 0, 0, 0, 1},
-            {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-            {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-            {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-            {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-            {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-            {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 
     };
     const int TILE_SIZE = 60;
-    sf::RectangleShape tile(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+    //sf::RectangleShape tile(sf::Vector2f(TILE_SIZE, TILE_SIZE));
 
     for (int y = 0; y < 10; y++) {
         for (int x = 0; x < 10; x++) {
-            if (tileMap[x][y] == 1) {
-                tile.setFillColor(sf::Color::Blue);
+            if (tileMap[y][x] == 1) {
+                this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE,TILE_SIZE));
+                this->TILE_MAP[y][x].setFillColor(sf::Color::Blue);
             } else {
-                tile.setFillColor(sf::Color::Black);
+                this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE,TILE_SIZE));
+                this->TILE_MAP[y][x].setFillColor(sf::Color::Black);
             }
-            tile.setPosition(x * TILE_SIZE, y * TILE_SIZE);
-            this->window->draw(tile);
+            this->TILE_MAP[y][x].setPosition(x * TILE_SIZE, y * TILE_SIZE);
+            this->window->draw(this->TILE_MAP[y][x]);
         }
     }
 
 }
+void Game::renderMap(){
+
+    for (int y = 0; y < 10; y++) {
+        for (int x = 0; x < 10; x++) {
+            this->window->draw(this->TILE_MAP[y][x]);
+        }
+    }
+}
+void Game:: updateMap(){
+
+    for (int y = 0; y < 10; y++) {
+        for (int x = 0; x < 10; x++) {
+            sf::Color color = this->TILE_MAP[y][x].getFillColor();
+            sf::FloatRect bounds = this->TILE_MAP[y][x].getGlobalBounds();
+
+            if(
+                    this->player->getBounds().intersects(bounds)&&
+                    this->isMovingUp&&
+                    color == sf::Color::Blue
+                    ){
+
+               //wTILE_MAP[y][x].setFillColor(sf::Color::Red);
+
+                this-> collisionTop = true;
+                this->isMovingUp = false;
+
+            }
+            if(
+                    this->player->getBounds().intersects(bounds)&&
+                    this->isMovingDown&&
+                    color == sf::Color::Blue
+                    ){
+
+
+                this-> collisionBot = true;
+                this->isMovingDown = false;
+            }
+            if(
+                    this->player->getBounds().intersects(bounds)&&
+                    this->isMovingLeft&&
+                    color == sf::Color::Blue
+                    ){
+
+
+                this-> collisionLeft= true;
+                this->isMovingLeft = false;
+            }
+            if(
+                    this->player->getBounds().intersects(bounds)&&
+                    this->isMovingRight&&
+                    color == sf::Color::Blue
+                    ){
+
+
+                this-> collisionRight = true;
+                this->isMovingRight = false;
+            }
+
+        }
+    }
+}
+
 void Game::initPlayer() {
     this->player= new Player();
 }
@@ -49,9 +113,17 @@ Game::Game(){
     this->initWindow();
     this->initPlayer();
     this->initMap();
+    isMovingUp = false ;
+    isMovingDown = false;
+    isMovingLeft = false;
+    isMovingRight = false;
+    canMoveUp =true ;
+    canMoveDown = true ;
+    canMoveLeft = true ;
+    canMoveRight =true ;
+    collisionTop = false;
 }
-Game::~Game()
-{
+Game::~Game(){
     delete this->window;
 
 }
@@ -66,38 +138,97 @@ void Game::updatePollEvents() {
     }
 }
  void Game::updateInput(){
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
 
-        this->player->move(0, -2.f);
-
-    }
-     if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
-
-         this->player->move(0, 2.f);
-
+     this->canMoveLeft = true;
+     this->canMoveRight = true;
+     this->canMoveUp = true;
+     this->canMoveDown = true;
+     if(this->player->getBounds().left<0) {
+         canMoveLeft = false;
      }
-     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-
-         this->player->move(-2.f, 0);
-
+     if(this->player->getBounds().left+50>600) {
+         canMoveRight = false;
      }
-     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-
-         this->player->move(2.f,0);
-
+     if(this->player->getBounds().top<0) {
+         canMoveUp = false;
      }
+     if(this->player->getBounds().top+50>600) {
+         canMoveDown = false;
+     }
+
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && canMoveUp && !collisionTop) {
+                    //bools de deteccion de colisiones
+                    this->isMovingUp = true;
+                    this->isMovingDown = false;
+                    this->canMoveDown = true;
+
+                    this->canMoveLeft = false;
+                    this->canMoveRight = false;
+
+
+                    collisionBot = false;
+                    this->player->move(0, -2.f);
+
+                }
+
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && canMoveDown && !collisionBot) {
+                    this->isMovingDown = true;
+                    this->isMovingUp = false;
+
+
+                    this->canMoveLeft = false;
+                    this->canMoveRight = false;
+
+
+                    collisionTop = false;
+
+                    this->player->move(0, 2.f);
+
+                }
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && canMoveLeft && !collisionLeft) {
+                    this->isMovingLeft = true;
+                    this->isMovingRight = false;
+                    this->canMoveRight = true;
+
+
+                    collisionRight = false;
+
+
+                    this->player->move(-2.f, 0);
+
+                }
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && canMoveRight && !collisionRight) {
+                    this->isMovingRight = true;
+                    this->isMovingLeft = false;
+
+                    collisionLeft = false;
+
+
+                    this->player->move(2.f, 0);
+
+                }
+
+
+
+
+
 }
 void Game::update(){
 
     this->updatePollEvents();
     this->updateInput();
     //this->player->update();
+    this->updateMap();
 
 }
 
 void Game::render(){
     this->window->clear();
-    this->initMap();
+    this->renderMap();
     this->player->render(*this->window);
 
     this->window->display();

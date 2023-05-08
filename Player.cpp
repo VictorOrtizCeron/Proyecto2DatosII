@@ -20,7 +20,7 @@ Player::~Player() {
 
 }
 void Player::initTexture() {
-    circulo.setRadius(20.f);
+    circulo.setRadius(25.f);
     circulo.setFillColor(sf::Color::Yellow);
     circulo.setPosition(400.f-50.f,400.f-50.f);
 

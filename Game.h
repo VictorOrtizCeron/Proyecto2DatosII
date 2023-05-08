@@ -19,7 +19,8 @@ public:
     void render();
     void updateInput();
     void updatePollEvents();
-
+    void renderMap();
+    void updateMap();
 
 
 private:
@@ -27,8 +28,21 @@ private:
     void initPlayer();
     void initMap();
     Player * player;
-
-
+    static const int ROWS = 10;
+    static const int COLS = 10;
+    sf::RectangleShape TILE_MAP[ROWS][COLS];
+    bool isMovingUp ;
+    bool isMovingDown ;
+    bool isMovingLeft ;
+    bool isMovingRight ;
+    bool canMoveUp ;
+    bool canMoveDown ;
+    bool canMoveLeft ;
+    bool canMoveRight ;
+    bool collisionTop;
+    bool collisionBot;
+    bool collisionLeft;
+    bool collisionRight;
 
 
 };
