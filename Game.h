@@ -4,7 +4,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Player.h"
-
+#include "Point.h"
 #ifndef PROYECTO2DATOSII_GAME_H
 #define PROYECTO2DATOSII_GAME_H
 
@@ -21,7 +21,8 @@ public:
     void updatePollEvents();
     void renderMap();
     void updateMap();
-
+    void updatePoints();
+    void renderPoints();
 
 private:
     sf::RenderWindow* window;
@@ -32,7 +33,7 @@ private:
     static const int COLS = 10;
     static const int points = 100;
     sf::RectangleShape TILE_MAP[ROWS][COLS];
-    sf::CircleShape POINTS[100];
+    Point POINTS[ROWS][COLS];
 
     bool isMovingUp ;
     bool isMovingDown ;
