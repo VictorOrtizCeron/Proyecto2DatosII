@@ -55,7 +55,10 @@ void Game::initMap() {
 
     };
     const int TILE_SIZE = 60;
-    //sf::RectangleShape tile(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+
+
+
+
 
     for (int y = 0; y < 10; y++) {
         for (int x = 0; x < 10; x++) {
@@ -174,6 +177,7 @@ Game::Game() {
 
     this->initPlayer();
     this->initMap();
+    this->powerUp = new PowerUp();
     this->initText();
     levelCounter = 1;
     pointCounter = 0;
@@ -307,7 +311,7 @@ void Game::render() {
     this->renderMap();
     this->player->render(*this->window);
     this->POINTS->renderPointList(*this->window);
-
+    this->powerUp->render(*this->window);
     this->window->display();
 
 }

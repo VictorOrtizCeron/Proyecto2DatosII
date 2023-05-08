@@ -7,6 +7,7 @@
 #include "Point.h"
 #include "PointNode.h"
 #include "PointLinkedList.h"
+#include "PowerUp.h"
 #ifndef PROYECTO2DATOSII_GAME_H
 #define PROYECTO2DATOSII_GAME_H
 
@@ -34,6 +35,7 @@ private:
     void initMap();
     void initText();
     void initPOINTS();
+    PowerUp*powerUp;
     sf::Text text[Max_inGame];
     sf::Font minecraftFont;
     Player * player;
