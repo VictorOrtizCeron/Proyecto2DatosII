@@ -6,7 +6,7 @@
 
 void Game::initWindow() {
 
-    this->window = new sf::RenderWindow(sf::VideoMode(600, 600), "Ventana de Juego");
+    this->window = new sf::RenderWindow(sf::VideoMode(600, 700), "Ventana de Juego");
     this->window->setFramerateLimit(60);
     this->window->setVerticalSyncEnabled(false);
 }
@@ -35,12 +35,16 @@ void Game::initMap() {
         for (int x = 0; x < 10; x++) {
             if (tileMap[y][x] == 1) {
                 this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
-                this->TILE_MAP[y][x].setFillColor(sf::Color::Blue);
+                this->TILE_MAP[y][x].setFillColor(sf::Color::Transparent);
+                this->TILE_MAP[y][x].setOutlineThickness(-2);
+                this->TILE_MAP[y][x].setOutlineColor(sf::Color::Blue);
+
             } else {
                 this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
                 this->TILE_MAP[y][x].setFillColor(sf::Color::Black);
+
                 Point * newPoint = new Point();
-                newPoint->setPosition(x*TILE_SIZE+27.5,y*TILE_SIZE+27.5);
+                newPoint->setPosition(x*TILE_SIZE+25,y*TILE_SIZE+25);
 
                 POINTS->addFirst(newPoint);
 
@@ -71,7 +75,7 @@ void Game::updateMap() {
             if (
                     this->player->getBounds().intersects(bounds) &&
                     this->isMovingUp &&
-                    color == sf::Color::Blue
+                    color == sf::Color::Transparent
                     ) {
 
 
@@ -83,7 +87,7 @@ void Game::updateMap() {
             if (
                     this->player->getBounds().intersects(bounds) &&
                     this->isMovingDown &&
-                    color == sf::Color::Blue
+                    color == sf::Color::Transparent
                     ) {
 
 
@@ -94,7 +98,7 @@ void Game::updateMap() {
             if (
                     this->player->getBounds().intersects(bounds) &&
                     this->isMovingLeft &&
-                    color == sf::Color::Blue
+                    color == sf::Color::Transparent
                     ) {
 
 
@@ -105,7 +109,7 @@ void Game::updateMap() {
             if (
                     this->player->getBounds().intersects(bounds) &&
                     this->isMovingRight &&
-                    color == sf::Color::Blue
+                    color == sf::Color::Transparent
                     ) {
 
 
