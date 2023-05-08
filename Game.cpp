@@ -10,7 +10,33 @@ void Game::initWindow() {
     this->window->setFramerateLimit(60);
     this->window->setVerticalSyncEnabled(false);
 }
+void Game:: initText(){
 
+    if (!this->minecraftFont.loadFromFile("/home/vortizc/Downloads/Minecraft.ttf")) {
+        std::cout<<"fallo la carga de font"<<std::endl;
+    }
+
+    this->text[0].setFont(this->minecraftFont);
+    this->text[0].setString("Lives:");
+    this->text[0].setCharacterSize(20);
+    this->text[0].setFillColor(sf::Color::White);
+    this->text[0].setPosition(40, 630);
+
+    this->text[1].setFont(this->minecraftFont);
+    this->text[1].setString("Points:");
+    this->text[1].setCharacterSize(20);
+    this->text[1].setFillColor(sf::Color::White);
+    this->text[1].setPosition(190, 630);
+
+    this->text[2].setFont(this->minecraftFont);
+    this->text[2].setString("Level: ");
+    this->text[2].setCharacterSize(20);
+    this->text[2].setFillColor(sf::Color::White);
+    this->text[2].setPosition(340, 630);
+
+
+
+}
 void Game::initMap() {
     this->POINTS = new PointLinkedList();
 
@@ -130,6 +156,7 @@ void Game::updatePoints() {
 
         if(current->point->getBounds().intersects(this->player->getBounds())){
             Point * pointPTR = POINTS->removePoint(current->point);
+            pointCounter++;
             delete pointPTR;
 
         }
@@ -144,8 +171,13 @@ void Game::initPlayer() {
 
 Game::Game() {
     this->initWindow();
+
     this->initPlayer();
     this->initMap();
+    this->initText();
+    levelCounter = 1;
+    pointCounter = 0;
+    liveCounter = 3;
     isMovingUp = false;
     isMovingDown = false;
     isMovingLeft = false;
@@ -243,6 +275,20 @@ void Game::updateInput() {
 
 }
 
+void Game::updateText(){
+
+    this->text[0].setString("Lives: "+ std::to_string(liveCounter));
+    this->text[1].setString("Points: "+ std::to_string(pointCounter));
+    this->text[2].setString("Level: "+ std::to_string(levelCounter));
+
+}
+void Game::renderText(){
+
+    for (int i = 0; i<4 ; i++){
+        this->window->draw(text[i]);
+    }
+
+}
 void Game::update() {
 
     this->updatePollEvents();
@@ -250,15 +296,20 @@ void Game::update() {
     //this->player->update();
     this->updateMap();
     this->updatePoints();
+    this->updateText();
 
 }
 
 void Game::render() {
+
     this->window->clear();
+    this->renderText();
     this->renderMap();
     this->player->render(*this->window);
     this->POINTS->renderPointList(*this->window);
+
     this->window->display();
+
 }
 
 void Game::run() {

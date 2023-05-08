@@ -10,7 +10,7 @@
 #ifndef PROYECTO2DATOSII_GAME_H
 #define PROYECTO2DATOSII_GAME_H
 
-
+#define Max_inGame 4
 class Game {
 public:
     Game();
@@ -22,6 +22,8 @@ public:
     void updateInput();
     void updatePollEvents();
     void renderMap();
+    void renderText();
+    void updateText();
     void updateMap();
     void updatePoints();
 
@@ -30,14 +32,20 @@ private:
     sf::RenderWindow* window;
     void initPlayer();
     void initMap();
+    void initText();
     void initPOINTS();
+    sf::Text text[Max_inGame];
+    sf::Font minecraftFont;
     Player * player;
+    int liveCounter;
+    int pointCounter;
+    int levelCounter;
     static const int ROWS = 10;
     static const int COLS = 10;
     static const int points = 100;
     sf::RectangleShape TILE_MAP[ROWS][COLS];
     PointLinkedList* POINTS;
-    int PointCount;
+
 
     bool isMovingUp ;
     bool isMovingDown ;
