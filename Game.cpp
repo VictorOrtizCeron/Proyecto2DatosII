@@ -92,79 +92,6 @@ void Game::renderMap() {
     }
 }
 
-void Game::updateMap() {
-
-    for (int y = 0; y < 10; y++) {
-        for (int x = 0; x < 10; x++) {
-            sf::Color color = this->TILE_MAP[y][x].getFillColor();
-            sf::FloatRect bounds = this->TILE_MAP[y][x].getGlobalBounds();
-
-            if (
-                    this->player->getBounds().intersects(bounds) &&
-                    this->isMovingUp &&
-                    color == sf::Color::Transparent
-                    ) {
-
-
-                this->collisionTop = true;
-                this->isMovingUp = false;
-
-
-            }
-            if (
-                    this->player->getBounds().intersects(bounds) &&
-                    this->isMovingDown &&
-                    color == sf::Color::Transparent
-                    ) {
-
-
-                this->collisionBot = true;
-                this->isMovingDown = false;
-
-            }
-            if (
-                    this->player->getBounds().intersects(bounds) &&
-                    this->isMovingLeft &&
-                    color == sf::Color::Transparent
-                    ) {
-
-
-                this->collisionLeft = true;
-                this->isMovingLeft = false;
-
-            }
-            if (
-                    this->player->getBounds().intersects(bounds) &&
-                    this->isMovingRight &&
-                    color == sf::Color::Transparent
-                    ) {
-
-
-                this->collisionRight = true;
-                this->isMovingRight = false;
-
-            }
-        }
-    }
-}
-
-void Game::updatePoints() {
-
-    PointNode *current = this->POINTS->head;
-
-    while (current != nullptr) {
-
-
-        if (current->point->getBounds().intersects(this->player->getBounds())) {
-            Point *pointPTR = POINTS->removePoint(current->point);
-            pointCounter += 10;
-            delete pointPTR;
-
-        }
-        current = current->nextPoint;
-    }
-
-}
 
 void Game::initPlayer() {
     this->player = new Player();
@@ -290,11 +217,10 @@ void Game::spawnPowerUp() {
     if (TILE_MAP[y][x].getFillColor() == sf::Color::Black) {
         //std::cout << "spawn PowerUp baby " << x << "," << y << std::endl;
         PowerUp *newPowerUp = new PowerUp();
-        newPowerUp->setPosition(this->TILE_SIZE * x+20, this->TILE_SIZE * y+20);
+        newPowerUp->setPosition(this->TILE_SIZE * x + 20, this->TILE_SIZE * y + 20);
         POWERUPS->addFirst(newPowerUp);
 
-    }
-    else{
+    } else {
         spawnPowerUp();
     }
 
@@ -310,6 +236,90 @@ void Game::updatePowerUps() {
     }
     if (pointCounter % 200 != 0 && spawnedPowerUp) {
         spawnedPowerUp = false;
+    }
+
+    PowerUpNode *current = this->POWERUPS->head;
+
+    while (current != nullptr) {
+        if (current->powerUp->getBounds().intersects(this->player->getBounds())) {
+            PowerUp* powerUpPTR = POWERUPS->removePowerUp(current->powerUp);
+            delete powerUpPTR;
+        }
+        current = current->nextPowerUp;
+    }
+
+}
+
+void Game::updateMap() {
+
+    for (int y = 0; y < 10; y++) {
+        for (int x = 0; x < 10; x++) {
+            sf::Color color = this->TILE_MAP[y][x].getFillColor();
+            sf::FloatRect bounds = this->TILE_MAP[y][x].getGlobalBounds();
+
+            if (
+                    this->player->getBounds().intersects(bounds) &&
+                    this->isMovingUp &&
+                    color == sf::Color::Transparent
+                    ) {
+
+
+                this->collisionTop = true;
+                this->isMovingUp = false;
+
+
+            }
+            if (
+                    this->player->getBounds().intersects(bounds) &&
+                    this->isMovingDown &&
+                    color == sf::Color::Transparent
+                    ) {
+
+
+                this->collisionBot = true;
+                this->isMovingDown = false;
+
+            }
+            if (
+                    this->player->getBounds().intersects(bounds) &&
+                    this->isMovingLeft &&
+                    color == sf::Color::Transparent
+                    ) {
+
+
+                this->collisionLeft = true;
+                this->isMovingLeft = false;
+
+            }
+            if (
+                    this->player->getBounds().intersects(bounds) &&
+                    this->isMovingRight &&
+                    color == sf::Color::Transparent
+                    ) {
+
+
+                this->collisionRight = true;
+                this->isMovingRight = false;
+
+            }
+        }
+    }
+}
+
+void Game::updatePoints() {
+
+    PointNode *current = this->POINTS->head;
+
+    while (current != nullptr) {
+
+
+        if (current->point->getBounds().intersects(this->player->getBounds())) {
+            Point *pointPTR = POINTS->removePoint(current->point);
+            pointCounter += 10;
+            delete pointPTR;
+
+        }
+        current = current->nextPoint;
     }
 
 }
