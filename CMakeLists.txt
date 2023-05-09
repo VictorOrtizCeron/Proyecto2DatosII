@@ -17,5 +17,5 @@ if(SFML_FOUND)
     message(STATUS "SFML_VERSION: ${SFML_VERSION}")
 endif()
 
-add_executable(Proyecto2DatosII main.cpp Game.cpp Game.h Player.cpp Player.h Point.cpp Point.h PointNode.cpp PointNode.h PointLinkedList.cpp PointLinkedList.h PowerUp.cpp PowerUp.h)
+add_executable(Proyecto2DatosII main.cpp Game.cpp Game.h Player.cpp Player.h Point.cpp Point.h PointNode.cpp PointNode.h PointLinkedList.cpp PointLinkedList.h PowerUp.cpp PowerUp.h PowerUpNode.cpp PowerUpNode.h PowerUpLinkedList.cpp PowerUpLinkedList.h)
 target_link_libraries (Proyecto2DatosII sfml-graphics sfml-window sfml-system)

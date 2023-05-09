@@ -8,6 +8,9 @@
 #include "PointNode.h"
 #include "PointLinkedList.h"
 #include "PowerUp.h"
+#include "PowerUpNode.h"
+#include "PowerUpLinkedList.h"
+#include  <random>
 #ifndef PROYECTO2DATOSII_GAME_H
 #define PROYECTO2DATOSII_GAME_H
 
@@ -27,6 +30,7 @@ public:
     void updateText();
     void updateMap();
     void updatePoints();
+    void updatePowerUps();
 
 
 private:
@@ -34,7 +38,9 @@ private:
     void initPlayer();
     void initMap();
     void initText();
+    void initPowerUpList();
     void initPOINTS();
+    void spawnPowerUp();
     PowerUp*powerUp;
     sf::Text text[Max_inGame];
     sf::Font minecraftFont;
@@ -42,11 +48,13 @@ private:
     int liveCounter;
     int pointCounter;
     int levelCounter;
+    int TILE_SIZE;
     static const int ROWS = 10;
     static const int COLS = 10;
     static const int points = 100;
     sf::RectangleShape TILE_MAP[ROWS][COLS];
     PointLinkedList* POINTS;
+    PowerUpLinkedList* POWERUPS;
 
 
     bool isMovingUp ;
@@ -61,6 +69,7 @@ private:
     bool collisionBot;
     bool collisionLeft;
     bool collisionRight;
+    bool spawnedPowerUp;
 
 
 };

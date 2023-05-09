@@ -18,7 +18,7 @@ public:
 
     void setPosition(float x, float y);
 
-    void render(sf::RenderTarget &target);
+    void renderPowerUp(sf::RenderTarget &target);
 
     sf::CircleShape circulo;
 private:

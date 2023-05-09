@@ -10,10 +10,11 @@ void Game::initWindow() {
     this->window->setFramerateLimit(60);
     this->window->setVerticalSyncEnabled(false);
 }
-void Game:: initText(){
+
+void Game::initText() {
 
     if (!this->minecraftFont.loadFromFile("/home/vortizc/Downloads/Minecraft.ttf")) {
-        std::cout<<"fallo la carga de font"<<std::endl;
+        std::cout << "fallo la carga de font" << std::endl;
     }
 
     this->text[0].setFont(this->minecraftFont);
@@ -35,11 +36,12 @@ void Game:: initText(){
     this->text[2].setPosition(340, 630);
 
 
-
 }
-void Game::initMap() {
-    this->POINTS = new PointLinkedList();
 
+void Game::initMap() {
+
+    this->POINTS = new PointLinkedList();
+    this->TILE_SIZE = 60;
     int tileMap[10][10] = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -54,10 +56,6 @@ void Game::initMap() {
 
 
     };
-    const int TILE_SIZE = 60;
-
-
-
 
 
     for (int y = 0; y < 10; y++) {
@@ -72,8 +70,8 @@ void Game::initMap() {
                 this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
                 this->TILE_MAP[y][x].setFillColor(sf::Color::Black);
 
-                Point * newPoint = new Point();
-                newPoint->setPosition(x*TILE_SIZE+25,y*TILE_SIZE+25);
+                Point *newPoint = new Point();
+                newPoint->setPosition(x * TILE_SIZE + 25, y * TILE_SIZE + 25);
 
                 POINTS->addFirst(newPoint);
 
@@ -152,14 +150,14 @@ void Game::updateMap() {
 
 void Game::updatePoints() {
 
-    PointNode * current = this->POINTS->head;
+    PointNode *current = this->POINTS->head;
 
-    while(current != nullptr){
+    while (current != nullptr) {
 
 
-        if(current->point->getBounds().intersects(this->player->getBounds())){
-            Point * pointPTR = POINTS->removePoint(current->point);
-            pointCounter++;
+        if (current->point->getBounds().intersects(this->player->getBounds())) {
+            Point *pointPTR = POINTS->removePoint(current->point);
+            pointCounter += 10;
             delete pointPTR;
 
         }
@@ -172,12 +170,16 @@ void Game::initPlayer() {
     this->player = new Player();
 }
 
+void Game::initPowerUpList() {
+    this->POWERUPS = new PowerUpLinkedList();
+}
+
 Game::Game() {
     this->initWindow();
 
     this->initPlayer();
     this->initMap();
-    this->powerUp = new PowerUp();
+    this->initPowerUpList();
     this->initText();
     levelCounter = 1;
     pointCounter = 0;
@@ -194,6 +196,7 @@ Game::Game() {
     collisionRight = false;
     collisionBot = false;
     collisionLeft = false;
+    spawnedPowerUp = false;
 }
 
 Game::~Game() {
@@ -279,20 +282,56 @@ void Game::updateInput() {
 
 }
 
-void Game::updateText(){
+void Game::spawnPowerUp() {
 
-    this->text[0].setString("Lives: "+ std::to_string(liveCounter));
-    this->text[1].setString("Points: "+ std::to_string(pointCounter));
-    this->text[2].setString("Level: "+ std::to_string(levelCounter));
+    int x = rand() % 10;
+    int y = rand() % 10;
+
+    if (TILE_MAP[y][x].getFillColor() == sf::Color::Black) {
+        //std::cout << "spawn PowerUp baby " << x << "," << y << std::endl;
+        PowerUp *newPowerUp = new PowerUp();
+        newPowerUp->setPosition(this->TILE_SIZE * x+20, this->TILE_SIZE * y+20);
+        POWERUPS->addFirst(newPowerUp);
+
+    }
+    else{
+        spawnPowerUp();
+    }
 
 }
-void Game::renderText(){
 
-    for (int i = 0; i<4 ; i++){
+void Game::updatePowerUps() {
+    //std::cout<<POWERUPS->size<<std::endl;
+    if (pointCounter % 200 == 0 && !spawnedPowerUp) {
+
+        this->spawnPowerUp();
+        spawnedPowerUp = true;
+
+    }
+    if (pointCounter % 200 != 0 && spawnedPowerUp) {
+        spawnedPowerUp = false;
+    }
+
+}
+
+void Game::updateText() {
+
+    this->text[0].setString("Lives: " + std::to_string(liveCounter));
+    this->text[1].setString("Points: " + std::to_string(pointCounter));
+    this->text[2].setString("Level: " + std::to_string(levelCounter));
+
+}
+
+
+void Game::renderText() {
+
+    for (int i = 0; i < 4; i++) {
         this->window->draw(text[i]);
     }
 
 }
+
+
 void Game::update() {
 
     this->updatePollEvents();
@@ -301,6 +340,7 @@ void Game::update() {
     this->updateMap();
     this->updatePoints();
     this->updateText();
+    this->updatePowerUps();
 
 }
 
@@ -311,7 +351,7 @@ void Game::render() {
     this->renderMap();
     this->player->render(*this->window);
     this->POINTS->renderPointList(*this->window);
-    this->powerUp->render(*this->window);
+    this->POWERUPS->renderPowerUpList(*this->window);
     this->window->display();
 
 }
@@ -325,3 +365,4 @@ void Game::run() {
     }
 
 }
+

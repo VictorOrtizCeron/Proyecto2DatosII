@@ -15,8 +15,8 @@ public:
 
     virtual ~PointNode();
 
-    PointNode *nextPoint{};//puntero a proximo elemento de la lista
-    Point *point{};//puntero al objeto Bullet correspondiente
+    PointNode *nextPoint{};
+    Point *point{};
 };
 
 

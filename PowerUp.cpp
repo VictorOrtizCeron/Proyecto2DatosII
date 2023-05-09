@@ -26,7 +26,7 @@ const sf::Vector2f &PowerUp::getPos() const {
 const sf::FloatRect PowerUp::getBounds() const {
     return this->circulo.getGlobalBounds();
 }
-void PowerUp::render(sf::RenderTarget &target) {
+void PowerUp::renderPowerUp(sf::RenderTarget &target) {
     target.draw(this->circulo);
 }
 void PowerUp::setPosition(float x, float y) {
