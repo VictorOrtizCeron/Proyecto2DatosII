@@ -95,6 +95,12 @@ void Game::renderMap() {
 
 void Game::initPlayer() {
     this->player = new Player();
+    this->playerPos = player->getPos();
+}
+
+void Game::initFantasma() {
+    this->protoFantasma = new Fantasma(3);
+    protoFantasma->circulo.setPosition(60 * 8, 60 * 8);
 }
 
 void Game::initPowerUpList() {
@@ -105,6 +111,7 @@ Game::Game() {
     this->initWindow();
 
     this->initPlayer();
+    this->initFantasma();
     this->initMap();
     this->initPowerUpList();
     this->initText();
@@ -242,7 +249,7 @@ void Game::updatePowerUps() {
 
     while (current != nullptr) {
         if (current->powerUp->getBounds().intersects(this->player->getBounds())) {
-            PowerUp* powerUpPTR = POWERUPS->removePowerUp(current->powerUp);
+            PowerUp *powerUpPTR = POWERUPS->removePowerUp(current->powerUp);
             delete powerUpPTR;
         }
         current = current->nextPowerUp;
@@ -357,11 +364,16 @@ void Game::update() {
 void Game::render() {
 
     this->window->clear();
-    this->renderText();
     this->renderMap();
-    this->player->render(*this->window);
+    this->renderText();
+
     this->POINTS->renderPointList(*this->window);
     this->POWERUPS->renderPowerUpList(*this->window);
+
+    this->player->render(*this->window);
+
+    this->protoFantasma->render(*this->window);
+
     this->window->display();
 
 }

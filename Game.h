@@ -4,6 +4,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Player.h"
+#include "Fantasma.h"
 #include "Point.h"
 #include "PointNode.h"
 #include "PointLinkedList.h"
@@ -31,11 +32,12 @@ public:
     void updateMap();
     void updatePoints();
     void updatePowerUps();
-
+    void updateFantasma();
 
 private:
     sf::RenderWindow* window;
     void initPlayer();
+    void initFantasma();
     void initMap();
     void initText();
     void initPowerUpList();
@@ -45,6 +47,7 @@ private:
     sf::Text text[Max_inGame];
     sf::Font minecraftFont;
     Player * player;
+    Fantasma * protoFantasma;
     int liveCounter;
     int pointCounter;
     int levelCounter;
@@ -56,7 +59,7 @@ private:
     PointLinkedList* POINTS;
     PowerUpLinkedList* POWERUPS;
 
-
+    sf::Vector2f playerPos;
     bool isMovingUp ;
     bool isMovingDown ;
     bool isMovingLeft ;

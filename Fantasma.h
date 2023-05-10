@@ -4,9 +4,25 @@
 
 #ifndef PROYECTO2DATOSII_FANTASMA_H
 #define PROYECTO2DATOSII_FANTASMA_H
-
+#include <SFML/Graphics.hpp>
 
 class Fantasma {
+public:
+
+    Fantasma(int type);
+    virtual ~Fantasma();
+    const sf::Vector2f& getPos() const;
+    const  sf::FloatRect getBounds() const;
+    void move(const float dirX, const float dirY);
+    void update();
+    void render(sf::RenderTarget& target);
+
+    sf::CircleShape circulo;
+private:
+    int Type;
+    float movementSpeed;
+    void initVariables();
+    void initTexture(int type);
 
 };
 
