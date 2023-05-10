@@ -227,7 +227,7 @@ void Game::spawnPowerUp() {
 }
 
 void Game::updatePowerUps() {
-    //std::cout<<POWERUPS->size<<std::endl;
+
     if (pointCounter % 200 == 0 && !spawnedPowerUp) {
 
         this->spawnPowerUp();
