@@ -18,6 +18,15 @@ public:
     void render(sf::RenderTarget& target);
 
     sf::CircleShape circulo;
+    bool isMovingLeft;
+    bool isMovingRight;
+    bool isMovingUp;
+    bool isMovingDown;
+    bool canMoveUp;
+    bool canMoveDown;
+    bool canMoveLeft;
+    bool canMoveRight;
+
 private:
     int Type;
     float movementSpeed;

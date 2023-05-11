@@ -9,6 +9,15 @@ Fantasma::Fantasma(int type) {
     this->initVariables();
     this->Type = type;
     this->initTexture(this->Type);
+    isMovingLeft = false;
+    isMovingRight = false;
+    isMovingUp = false;
+    isMovingDown = false;
+    canMoveUp = true;
+    canMoveDown = true;
+    canMoveLeft = true;
+    canMoveRight = true;
+
 
 }
 
@@ -17,7 +26,7 @@ Fantasma::~Fantasma() {
 }
 void Fantasma::initVariables()
 {
-    //types
+    this->movementSpeed = 2.f;
 }
 void Fantasma::initTexture(int type) {
 
@@ -51,4 +60,8 @@ const sf::FloatRect Fantasma::getBounds() const
 void Fantasma::render(sf::RenderTarget& target)
 {
     target.draw(this->circulo);
+}
+void Fantasma::move(const float dirX, const float dirY) {
+
+    this->circulo.move(this->movementSpeed*dirX,this->movementSpeed*dirY);
 }

@@ -15,6 +15,19 @@ public:
     void move(const float dirX, const float dirY);
     void update();
     void render(sf::RenderTarget& target);
+    bool isMovingUp ;
+    bool isMovingDown ;
+    bool isMovingLeft ;
+    bool isMovingRight ;
+    bool canMoveUp ;
+    bool canMoveDown ;
+    bool canMoveLeft ;
+    bool canMoveRight ;
+    bool collisionTop;
+    bool collisionBot;
+    bool collisionLeft;
+    bool collisionRight;
+
 private:
     sf::CircleShape circulo;
 

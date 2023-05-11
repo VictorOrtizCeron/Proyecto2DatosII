@@ -118,19 +118,7 @@ Game::Game() {
     levelCounter = 1;
     pointCounter = 0;
     liveCounter = 3;
-    isMovingUp = false;
-    isMovingDown = false;
-    isMovingLeft = false;
-    isMovingRight = false;
-    canMoveUp = true;
-    canMoveDown = true;
-    canMoveLeft = true;
-    canMoveRight = true;
-    collisionTop = false;
-    collisionRight = false;
-    collisionBot = false;
-    collisionLeft = false;
-    spawnedPowerUp = false;
+    this->spawnedPowerUp = false;
 }
 
 Game::~Game() {
@@ -150,65 +138,65 @@ void Game::updatePollEvents() {
 
 void Game::updateInput() {
 
-    this->canMoveLeft = true;
-    this->canMoveRight = true;
-    this->canMoveUp = true;
-    this->canMoveDown = true;
+    this->player->canMoveLeft = true;
+    this->player->canMoveRight = true;
+    this->player->canMoveUp = true;
+    this->player->canMoveDown = true;
 
-    if (this->player->getBounds().left < 5 || collisionLeft) {
-        canMoveLeft = false;
+    if (this->player->getBounds().left < 5 || player->collisionLeft) {
+        player->canMoveLeft = false;
     }
-    if (this->player->getBounds().left + 65 > 600 || collisionRight) {
-        canMoveRight = false;
+    if (this->player->getBounds().left + 65 > 600 || player->collisionRight) {
+        player->canMoveRight = false;
     }
-    if (this->player->getBounds().top < 5 || collisionTop) {
-        canMoveUp = false;
+    if (this->player->getBounds().top < 5 || player->collisionTop) {
+        player->canMoveUp = false;
     }
-    if (this->player->getBounds().top + 65 > 600 || collisionBot) {
-        canMoveDown = false;
+    if (this->player->getBounds().top + 65 > 600 || player->collisionBot) {
+        player->canMoveDown = false;
     }
 
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && canMoveUp) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && player->canMoveUp) {
 
-        this->isMovingUp = true;
-        this->isMovingDown = false;
-        this->canMoveDown = true;
-        this->canMoveLeft = false;
-        this->canMoveRight = false;
-        collisionBot = false;
+        this->player->isMovingUp = true;
+        this->player->isMovingDown = false;
+        this->player->canMoveDown = true;
+        this->player->canMoveLeft = false;
+        this->player->canMoveRight = false;
+        player->collisionBot = false;
         this->player->move(0, -2.f);
 
     }
 
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && canMoveDown) {
-        this->isMovingDown = true;
-        this->isMovingUp = false;
-        this->canMoveUp = true;
-        this->canMoveLeft = false;
-        this->canMoveRight = false;
-        collisionTop = false;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && player->canMoveDown) {
+        this->player->isMovingDown = true;
+        this->player->isMovingUp = false;
+        this->player->canMoveUp = true;
+        this->player->canMoveLeft = false;
+        this->player->canMoveRight = false;
+        this->player->collisionTop = false;
         this->player->move(0, 2.f);
 
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && canMoveLeft) {
-        this->isMovingLeft = true;
-        this->isMovingRight = false;
-        this->canMoveRight = true;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && player->canMoveLeft) {
+        this->player->isMovingLeft = true;
+        this->player->isMovingRight = false;
+        this->player->canMoveRight = true;
 
-        collisionRight = false;
+        player->collisionRight = false;
 
         this->player->move(-2.f, 0);
 
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && canMoveRight) {
-        this->isMovingRight = true;
-        this->isMovingLeft = false;
-        this->canMoveLeft = true;
-        collisionLeft = false;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && player->canMoveRight) {
+        this->player->isMovingRight = true;
+        this->player->isMovingLeft = false;
+        this->player->canMoveLeft = true;
+        this->player->collisionLeft = false;
         this->player->move(2.f, 0);
 
     }
@@ -263,54 +251,68 @@ void Game::updateMap() {
         for (int x = 0; x < 10; x++) {
             sf::Color color = this->TILE_MAP[y][x].getFillColor();
             sf::FloatRect bounds = this->TILE_MAP[y][x].getGlobalBounds();
+            bounds.width = 65.f;
+            bounds.height = 65.f;
 
             if (
                     this->player->getBounds().intersects(bounds) &&
-                    this->isMovingUp &&
+                    this->player->isMovingUp &&
                     color == sf::Color::Transparent
                     ) {
 
 
-                this->collisionTop = true;
-                this->isMovingUp = false;
+                this->player->collisionTop = true;
+                this->player->isMovingUp = false;
 
 
             }
             if (
                     this->player->getBounds().intersects(bounds) &&
-                    this->isMovingDown &&
+                    this->player->isMovingDown &&
                     color == sf::Color::Transparent
                     ) {
 
 
-                this->collisionBot = true;
-                this->isMovingDown = false;
+                this->player->collisionBot = true;
+                this->player->isMovingDown = false;
 
             }
             if (
                     this->player->getBounds().intersects(bounds) &&
-                    this->isMovingLeft &&
+                    this->player->isMovingLeft &&
                     color == sf::Color::Transparent
                     ) {
 
 
-                this->collisionLeft = true;
-                this->isMovingLeft = false;
+                this->player->collisionLeft = true;
+                this->player->isMovingLeft = false;
 
             }
             if (
                     this->player->getBounds().intersects(bounds) &&
-                    this->isMovingRight &&
+                    this->player->isMovingRight &&
                     color == sf::Color::Transparent
+
                     ) {
 
 
-                this->collisionRight = true;
-                this->isMovingRight = false;
+                this->player->collisionRight = true;
+                this->player->isMovingRight = false;
 
             }
+            if(protoFantasma->getBounds().intersects(bounds) &&
+                color == sf::Color::Transparent&&
+                this->protoFantasma->isMovingUp){
+                protoFantasma->canMoveUp = false;
+                protoFantasma->canMoveDown = true;
+
+                std::cout<<"colisiona"<<std::endl;
+            }
+
+
         }
     }
+
 }
 
 void Game::updatePoints() {
@@ -349,11 +351,48 @@ void Game::renderText() {
 }
 
 
+void Game::updatePlayerPos() {
+    this->playerPos = player->getPos();
+}
+
+void Game::updateFantasma() {
+
+
+
+
+    if (protoFantasma->getPos().x > playerPos.x  && protoFantasma->canMoveLeft) {
+        protoFantasma->move(-1.f, 0.f);
+
+    } else if (protoFantasma->getPos().x < playerPos.x && protoFantasma->canMoveRight) {
+        protoFantasma->move(1.f, 0.f);
+
+
+    } else if (protoFantasma->getPos().y > playerPos.y && protoFantasma->canMoveUp) {
+        this->protoFantasma->isMovingUp = true;
+        this->player->isMovingDown = false;
+        this->player->isMovingRight = false;
+        this -> player->isMovingLeft = false;
+        protoFantasma->move(0, -1.f);
+
+    } else if (protoFantasma->getPos().y < playerPos.y && protoFantasma->canMoveDown) {
+        protoFantasma->move(0, 1.f);
+    } else if (protoFantasma->getPos().x == playerPos.x) {
+        if (protoFantasma->getPos().y == playerPos.y) {
+            protoFantasma->move(0, 0);
+        }
+
+
+    }
+
+
+}
+
 void Game::update() {
 
     this->updatePollEvents();
     this->updateInput();
-    //this->player->update();
+    this->updatePlayerPos();
+    this->updateFantasma();
     this->updateMap();
     this->updatePoints();
     this->updateText();

@@ -8,6 +8,19 @@
 void Player::initVariables()
 {
     this->movementSpeed = 3.f;
+    isMovingUp = false;
+    isMovingDown = false;
+    isMovingLeft = false;
+    isMovingRight = false;
+    canMoveUp = true;
+    canMoveDown = true;
+    canMoveLeft = true;
+    canMoveRight = true;
+    collisionTop = false;
+    collisionRight = false;
+    collisionBot = false;
+    collisionLeft = false;
+
 
 }
 Player::Player(){

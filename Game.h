@@ -33,6 +33,7 @@ public:
     void updatePoints();
     void updatePowerUps();
     void updateFantasma();
+    void updatePlayerPos();
 
 private:
     sf::RenderWindow* window;
@@ -60,18 +61,7 @@ private:
     PowerUpLinkedList* POWERUPS;
 
     sf::Vector2f playerPos;
-    bool isMovingUp ;
-    bool isMovingDown ;
-    bool isMovingLeft ;
-    bool isMovingRight ;
-    bool canMoveUp ;
-    bool canMoveDown ;
-    bool canMoveLeft ;
-    bool canMoveRight ;
-    bool collisionTop;
-    bool collisionBot;
-    bool collisionLeft;
-    bool collisionRight;
+
     bool spawnedPowerUp;
 
 
