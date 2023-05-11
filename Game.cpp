@@ -390,9 +390,9 @@ void Game::updateFantasma() {
         this->protoFantasma->isMovingUp = false;
         this->protoFantasma->isMovingRight = false;
 
-//        this->protoFantasma->canMoveRight = true;
+w        this->protoFantasma->canMoveRight = true;
 //        this->protoFantasma->canMoveUp = true;
-        this->protoFantasma->canMoveDown = true;
+        //this->protoFantasma->canMoveDown = true;
 
         protoFantasma->move(-1.f, 0.f);
 
