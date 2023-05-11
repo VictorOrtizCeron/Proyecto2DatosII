@@ -221,6 +221,16 @@ void Game::spawnPowerUp() {
 
 }
 
+void Game::respawnPlayer(){
+    int x = rand() % 10;
+    int y = rand() % 10;
+    if (TILE_MAP[y][x].getFillColor() == sf::Color::Black) {
+        this->player->setPosition(x * TILE_SIZE, y * TILE_SIZE);
+
+    } else {
+        spawnPowerUp();
+    }
+}
 void Game::updatePowerUps() {
 
     if (pointCounter % 200 == 0 && !spawnedPowerUp) {
@@ -300,35 +310,35 @@ void Game::updateMap() {
                 this->player->isMovingRight = false;
 
             }
-            if(protoFantasma->getBounds().intersects(bounds) &&
-                color == sf::Color::Transparent&&
-                this->protoFantasma->isMovingUp){
+            if (protoFantasma->getBounds().intersects(bounds) &&
+                color == sf::Color::Transparent &&
+                this->protoFantasma->isMovingUp) {
                 protoFantasma->canMoveUp = false;
                 protoFantasma->canMoveDown = true;
 
 
             }
-            if(protoFantasma->getBounds().intersects(bounds) &&
-               color == sf::Color::Transparent&&
-               this->protoFantasma->isMovingDown){
+            if (protoFantasma->getBounds().intersects(bounds) &&
+                color == sf::Color::Transparent &&
+                this->protoFantasma->isMovingDown) {
                 protoFantasma->canMoveDown = false;
-                protoFantasma->canMoveUp= true;
+                protoFantasma->canMoveUp = true;
 
 
             }
-            if(protoFantasma->getBounds().intersects(bounds) &&
-               color == sf::Color::Transparent&&
-               this->protoFantasma->isMovingRight){
+            if (protoFantasma->getBounds().intersects(bounds) &&
+                color == sf::Color::Transparent &&
+                this->protoFantasma->isMovingRight) {
                 protoFantasma->canMoveRight = false;
-                protoFantasma->canMoveLeft= true;
+                protoFantasma->canMoveLeft = true;
 
 
             }
-            if(protoFantasma->getBounds().intersects(bounds) &&
-               color == sf::Color::Transparent&&
-               this->protoFantasma->isMovingLeft){
+            if (protoFantasma->getBounds().intersects(bounds) &&
+                color == sf::Color::Transparent &&
+                this->protoFantasma->isMovingLeft) {
                 protoFantasma->canMoveLeft = false;
-                protoFantasma->canMoveRight= true;
+                protoFantasma->canMoveRight = true;
 
 
             }
@@ -381,18 +391,15 @@ void Game::updatePlayerPos() {
 void Game::updateFantasma() {
 
 
-
-
-    if (protoFantasma->getPos().x > playerPos.x  && protoFantasma->canMoveLeft) {
+    if (protoFantasma->getPos().x > playerPos.x && protoFantasma->canMoveLeft) {
 
         this->protoFantasma->isMovingLeft = true;
         this->protoFantasma->isMovingDown = false;
         this->protoFantasma->isMovingUp = false;
         this->protoFantasma->isMovingRight = false;
 
-w        this->protoFantasma->canMoveRight = true;
-//        this->protoFantasma->canMoveUp = true;
-        //this->protoFantasma->canMoveDown = true;
+        this->protoFantasma->canMoveRight = true;
+
 
         protoFantasma->move(-1.f, 0.f);
 
@@ -403,8 +410,7 @@ w        this->protoFantasma->canMoveRight = true;
         this->protoFantasma->isMovingLeft = false;
 
         this->protoFantasma->canMoveLeft = true;
-//        this->protoFantasma->canMoveUp = true;
-//        this->protoFantasma->canMoveDown = true;
+
         protoFantasma->move(1.f, 0.f);
 
 
@@ -412,30 +418,29 @@ w        this->protoFantasma->canMoveRight = true;
         this->protoFantasma->isMovingUp = true;
         this->protoFantasma->isMovingDown = false;
         this->protoFantasma->isMovingRight = false;
-        this ->protoFantasma->isMovingLeft = false;
+        this->protoFantasma->isMovingLeft = false;
 
-//        this->protoFantasma ->canMoveLeft = true;
-        this->protoFantasma ->canMoveDown = true;
-//        this->protoFantasma ->canMoveRight = true;
+
+        this->protoFantasma->canMoveDown = true;
+
 
         protoFantasma->move(0, -1.f);
 
     } else if (protoFantasma->getPos().y < playerPos.y && protoFantasma->canMoveDown) {
         this->protoFantasma->isMovingDown = true;
-        this->protoFantasma->isMovingDown = false;
+        this->protoFantasma->isMovingUp = false;
         this->protoFantasma->isMovingRight = false;
-        this ->protoFantasma->isMovingLeft = false;
+        this->protoFantasma->isMovingLeft = false;
 
-        this->protoFantasma ->canMoveUp = true;
-//        this->protoFantasma ->canMoveLeft = true;
-//        this->protoFantasma ->canMoveRight = true;
+        this->protoFantasma->canMoveUp = true;
+
 
         protoFantasma->move(0, 1.f);
 
-    } else if (protoFantasma->getPos().x == playerPos.x) {
-        if (protoFantasma->getPos().y == playerPos.y) {
-            protoFantasma->move(0, 0);
-        }
+
+    } if (protoFantasma->getBounds().intersects(this->player->getBounds())) {
+        respawnPlayer();
+        this->liveCounter--;
 
 
     }

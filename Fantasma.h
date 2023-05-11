@@ -26,6 +26,9 @@ public:
     bool canMoveDown;
     bool canMoveLeft;
     bool canMoveRight;
+    bool chase;
+    bool search;
+    bool scatter;
 
 private:
     int Type;

@@ -44,6 +44,7 @@ private:
     void initPowerUpList();
     void initPOINTS();
     void spawnPowerUp();
+    void respawnPlayer();
     PowerUp*powerUp;
     sf::Text text[Max_inGame];
     sf::Font minecraftFont;

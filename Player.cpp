@@ -59,3 +59,6 @@ void Player::render(sf::RenderTarget& target)
 {
     target.draw(this->circulo);
 }
+void Player::setPosition(float x, float y) {
+    this->circulo.setPosition(x,y);
+}
