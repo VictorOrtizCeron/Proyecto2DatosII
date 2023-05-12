@@ -536,6 +536,15 @@ void Game::updatePlayerPos() {
     this->playerPos = player->getPos();
 }
 
+void Game::moveToPowerup(std::vector<sf::Vector2f> path){
+
+    for(auto node: path){
+
+
+    }
+
+}
+
 void Game::updateFantasma() {
 
     if (this->protoFantasma->getBounds().left < 5) {
@@ -614,10 +623,12 @@ void Game::updateFantasma() {
 
         std::vector<sf::Vector2f> path =Astar(this->protoFantasma->getPos(), this->POWERUPS->head->powerUp->getPos());
         pathMade = true;
+
         for(auto node : path){
 
             std::cout<<"Posición X: "<<node.x<< " Posición Y: "<<node.y<<std::endl;
         }
+
     }
 
 
