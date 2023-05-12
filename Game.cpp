@@ -328,6 +328,7 @@ std::vector<sf::Vector2f> Game::Astar(sf::Vector2f start, sf::Vector2f finish) {
                 }
                 int xPos = currentNode->tilePosition.x + x * 60;
                 int yPos = currentNode->tilePosition.y + y * 60;
+
                 // Ignore positions outside the map
                 if (xPos < 0 || xPos >= 600 || yPos < 0 || yPos >= 600) {
                     continue;
@@ -340,7 +341,9 @@ std::vector<sf::Vector2f> Game::Astar(sf::Vector2f start, sf::Vector2f finish) {
                 sf::Vector2f newNodePos;
                 newNodePos.x = xPos;
                 newNodePos.y = yPos;
-                Node *successor = new Node{newNodePos, , currentNode};
+                Node *successor = new Node{newNodePos, manhattanDist(newNodePos,finish) , currentNode};
+
+                //SIGUE CHECKEAR SI YA EL NODO ESTA EN
             }
 
         }
@@ -354,20 +357,6 @@ int Game::manhattanDist(sf::Vector2f currentPosition, sf::Vector2f finish) {
     int FinishY = finish.y /60;
     int h = abs(currentX - FinishX) + abs(currentY - FinishY);
     return h;
-
-//    float currentPositionx = 0;
-//    float currentPositiony = 0;
-//    float finishx = 540;
-//    float finishy = 540;
-//    int currentX = currentPositionx /60;
-//    int currentY = currentPositiony /60;
-//    int FinishX = finishx /60;
-//    int FinishY = finishy /60;
-//    int h = abs(FinishX-currentX ) + abs(FinishY-currentY  );
-//    std::cout<<FinishX<<std::endl;
-//    std::cout<<h;
-//    return h;
-
 
 }
 
