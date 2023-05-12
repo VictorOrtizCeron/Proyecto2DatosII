@@ -76,7 +76,7 @@ private:
 
 
     bool spawnedPowerUp;
-
+    bool pathMade;
 
 };
 

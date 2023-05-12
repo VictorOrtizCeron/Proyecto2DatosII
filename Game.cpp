@@ -119,6 +119,7 @@ Game::Game() {
     pointCounter = 0;
     liveCounter = 3;
     this->spawnedPowerUp = false;
+    this->pathMade = false;
 }
 
 Game::~Game() {
@@ -258,13 +259,12 @@ void Game::updatePowerUps() {
     PowerUpNode *current = this->POWERUPS->head;
 
     while (current != nullptr) {
-        std::cout << current->powerUp->getPos().x << std::endl;
-        std::cout << current->powerUp->getPos().y << std::endl;
+
         if (current->powerUp->getBounds().intersects(this->player->getBounds())) {
             PowerUp *powerUpPTR = POWERUPS->removePowerUp(current->powerUp);
             delete powerUpPTR;
         } else if (current->powerUp->getBounds().intersects(this->protoFantasma->getBounds())) {
-            \
+
             PowerUp *powerUpPTR = POWERUPS->removePowerUp(current->powerUp);
             delete powerUpPTR;
         }
@@ -287,12 +287,12 @@ std::vector<sf::Vector2f> Game::Astar(sf::Vector2f start, sf::Vector2f finish) {
     //Se agrega nodo inicial a openList
 
     openList.push_back(startNode);
-
+    std::cout<<openList[0]->h<<std::endl;
     while (!openList.empty()) {
         //se busca el indice del nodo con menor distancia manhattan
         int lowestIndex = 0;
 
-        for (int i = 0; openList.size(); i++) {
+        for (int i = 0; i< openList.size(); i++) {
             if (openList[i]->h < openList[lowestIndex]->h) {
                 lowestIndex = i;
             }
@@ -341,20 +341,65 @@ std::vector<sf::Vector2f> Game::Astar(sf::Vector2f start, sf::Vector2f finish) {
                 sf::Vector2f newNodePos;
                 newNodePos.x = xPos;
                 newNodePos.y = yPos;
-                Node *successor = new Node{newNodePos, manhattanDist(newNodePos,finish) , currentNode};
+                Node *successor = new Node{newNodePos, manhattanDist(newNodePos, finish), currentNode};
 
-                //SIGUE CHECKEAR SI YA EL NODO ESTA EN
+                //SIGUE CHECKEAR SI YA EL NODO ESTA EN las listas
+                bool inClosedList = false;
+                for (Node *closedNode: closedList) {
+                    if (closedNode->tilePosition.x == successor->tilePosition.x &&
+                        closedNode->tilePosition.y == successor->tilePosition.y) {
+                        inClosedList = true;
+                        break;
+                    }
+                }
+                if (inClosedList) {
+                    continue;
+                }
+
+                bool inOpenList = false;
+                for (Node *openNode: openList) {
+                    if (openNode->tilePosition.x == successor->tilePosition.x &&
+                        openNode->tilePosition.y == successor->tilePosition.y) {
+                        inOpenList = true;
+                        break;
+                    }
+                }
+                if (!inOpenList) {
+                    // Add the successor to the open list
+                    openList.push_back(successor);
+                } else {
+                    // If the successor is already in the open list, check if the new path to it is better
+                    for (Node *openNode: openList) {
+                        if (openNode->tilePosition.x == successor->tilePosition.x &&
+                            openNode->tilePosition.y == successor->tilePosition.y) {
+                            if (successor->h < openNode->h) {
+                                openNode->h = successor->h;
+                                openNode->parent = currentNode;
+                            }
+                            break;
+                        }
+                    }
+
+                }
             }
 
         }
     }
+    for (Node *node: openList) {
+        delete node;
+    }
+    for (Node *node: closedList) {
+        delete node;
+    }
+
+    return path;
 }
 
 int Game::manhattanDist(sf::Vector2f currentPosition, sf::Vector2f finish) {
-    int currentX = currentPosition.x /60;
-    int currentY = currentPosition.y /60;
-    int FinishX = finish.x /60;
-    int FinishY = finish.y /60;
+    int currentX = currentPosition.x / 60;
+    int currentY = currentPosition.y / 60;
+    int FinishX = finish.x / 60;
+    int FinishY = finish.y / 60;
     int h = abs(currentX - FinishX) + abs(currentY - FinishY);
     return h;
 
@@ -565,8 +610,14 @@ void Game::updateFantasma() {
     } else if (this->protoFantasma->isScattering) {
 
         //condicones de scatter
-    } else if (this->protoFantasma->isSearching) {
-        //condicones de busqueda de powerup
+    } else if (this->protoFantasma->isSearching && !pathMade) {
+
+        std::vector<sf::Vector2f> path =Astar(this->protoFantasma->getPos(), this->POWERUPS->head->powerUp->getPos());
+        pathMade = true;
+        for(auto node : path){
+
+            std::cout<<"Posición X: "<<node.x<< " Posición Y: "<<node.y<<std::endl;
+        }
     }
 
 
