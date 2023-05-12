@@ -17,6 +17,9 @@ Fantasma::Fantasma(int type) {
     canMoveDown = true;
     canMoveLeft = true;
     canMoveRight = true;
+    isChasing = true;
+    isSearching= false;
+    isScattering = false;
 
 
 }

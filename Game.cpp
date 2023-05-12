@@ -204,24 +204,7 @@ void Game::updateInput() {
 
 }
 
-void Game::spawnPowerUp() {
-
-    int x = rand() % 10;
-    int y = rand() % 10;
-
-    if (TILE_MAP[y][x].getFillColor() == sf::Color::Black) {
-        //std::cout << "spawn PowerUp baby " << x << "," << y << std::endl;
-        PowerUp *newPowerUp = new PowerUp();
-        newPowerUp->setPosition(this->TILE_SIZE * x + 20, this->TILE_SIZE * y + 20);
-        POWERUPS->addFirst(newPowerUp);
-
-    } else {
-        spawnPowerUp();
-    }
-
-}
-
-void Game::respawnPlayer(){
+void Game::respawnPlayer() {
     int x = rand() % 10;
     int y = rand() % 10;
     if (TILE_MAP[y][x].getFillColor() == sf::Color::Black) {
@@ -231,6 +214,29 @@ void Game::respawnPlayer(){
         spawnPowerUp();
     }
 }
+
+void Game::spawnPowerUp() {
+
+    int x = rand() % 10;
+    int y = rand() % 10;
+
+    if (TILE_MAP[y][x].getFillColor() == sf::Color::Black) {
+
+        PowerUp *newPowerUp = new PowerUp();
+        newPowerUp->setPosition(this->TILE_SIZE * x + 20, this->TILE_SIZE * y + 20);
+        POWERUPS->addFirst(newPowerUp);
+        this->protoFantasma->isSearching = true;
+        this->protoFantasma->isChasing = false;
+        this->protoFantasma->isScattering = false;
+
+
+    } else {
+        spawnPowerUp();
+    }
+
+}
+
+
 void Game::updatePowerUps() {
 
     if (pointCounter % 200 == 0 && !spawnedPowerUp) {
@@ -242,16 +248,126 @@ void Game::updatePowerUps() {
     if (pointCounter % 200 != 0 && spawnedPowerUp) {
         spawnedPowerUp = false;
     }
+    if (this->POWERUPS->head == nullptr) {
+        this->protoFantasma->isSearching = false;
+        this->protoFantasma->isChasing = true;
+        this->protoFantasma->isScattering = false;
+
+    }
 
     PowerUpNode *current = this->POWERUPS->head;
 
     while (current != nullptr) {
+        std::cout << current->powerUp->getPos().x << std::endl;
+        std::cout << current->powerUp->getPos().y << std::endl;
         if (current->powerUp->getBounds().intersects(this->player->getBounds())) {
+            PowerUp *powerUpPTR = POWERUPS->removePowerUp(current->powerUp);
+            delete powerUpPTR;
+        } else if (current->powerUp->getBounds().intersects(this->protoFantasma->getBounds())) {
+            \
             PowerUp *powerUpPTR = POWERUPS->removePowerUp(current->powerUp);
             delete powerUpPTR;
         }
         current = current->nextPowerUp;
     }
+
+}
+
+std::vector<sf::Vector2f> Game::Astar(sf::Vector2f start, sf::Vector2f finish) {
+
+    //Se define vector de camino para retornar
+    std::vector<sf::Vector2f> path;
+    //Se definen las listas abierta y cerrada
+    std::vector<Node *> openList;
+    std::vector<Node *> closedList;
+
+    Node *startNode = new Node{start, manhattanDist(start, finish), nullptr};
+    Node *endNode = new Node{finish, 0, nullptr};
+
+    //Se agrega nodo inicial a openList
+
+    openList.push_back(startNode);
+
+    while (!openList.empty()) {
+        //se busca el indice del nodo con menor distancia manhattan
+        int lowestIndex = 0;
+
+        for (int i = 0; openList.size(); i++) {
+            if (openList[i]->h < openList[lowestIndex]->h) {
+                lowestIndex = i;
+            }
+        }
+
+        //se establece el nodo en el cual se realizaran las comparaciones (los pasos de las flechitas)
+        Node *currentNode = openList[lowestIndex];
+
+        //se evalúa si el nodo esta a la par del nodo de destino
+        if (currentNode->h == endNode->h) {
+            Node *node = currentNode;
+            while (node != nullptr) {
+                //se inserta en la lista de camino
+                path.push_back(sf::Vector2f(node->tilePosition));
+                node = node->parent;
+            }
+            //se da vuelta a lista de camino para que vaya desde inicio a fin
+            std::reverse(path.begin(), path.end());
+            //se termina el bucle
+            break;
+        }
+        // Si no se cumple la condición, se saca de la openList y se mete a la closedList.
+        openList.erase(openList.begin() + lowestIndex);
+        closedList.push_back(currentNode);
+
+        //se genera un vector de Nodos que serán los hijos de nodo actual (los que tendran flechita)
+        std::vector<Node *> successors;
+        for (int y = -1; y <= 1; y++) {
+            for (int x = -1; x <= 1; x++) {
+                //Condición para saltarse los casos diagonales
+                if (x != 0 && y != 0) {
+                    continue;
+                }
+                int xPos = currentNode->tilePosition.x + x * 60;
+                int yPos = currentNode->tilePosition.y + y * 60;
+                // Ignore positions outside the map
+                if (xPos < 0 || xPos >= 600 || yPos < 0 || yPos >= 600) {
+                    continue;
+                }
+                //ignora celdas fuera del mapa
+                if (this->TILE_MAP[yPos / 60][xPos / 60].getFillColor() == sf::Color::Transparent) {
+                    continue;
+                }
+                // Create the successor node
+                sf::Vector2f newNodePos;
+                newNodePos.x = xPos;
+                newNodePos.y = yPos;
+                Node *successor = new Node{newNodePos, , currentNode};
+            }
+
+        }
+    }
+}
+
+int Game::manhattanDist(sf::Vector2f currentPosition, sf::Vector2f finish) {
+    int currentX = currentPosition.x /60;
+    int currentY = currentPosition.y /60;
+    int FinishX = finish.x /60;
+    int FinishY = finish.y /60;
+    int h = abs(currentX - FinishX) + abs(currentY - FinishY);
+    return h;
+
+//    float currentPositionx = 0;
+//    float currentPositiony = 0;
+//    float finishx = 540;
+//    float finishy = 540;
+//    int currentX = currentPositionx /60;
+//    int currentY = currentPositiony /60;
+//    int FinishX = finishx /60;
+//    int FinishY = finishy /60;
+//    int h = abs(FinishX-currentX ) + abs(FinishY-currentY  );
+//    std::cout<<FinishX<<std::endl;
+//    std::cout<<h;
+//    return h;
+
 
 }
 
@@ -374,7 +490,6 @@ void Game::updateText() {
 
 }
 
-
 void Game::renderText() {
 
     for (int i = 0; i < 4; i++) {
@@ -383,70 +498,91 @@ void Game::renderText() {
 
 }
 
-
 void Game::updatePlayerPos() {
     this->playerPos = player->getPos();
 }
 
 void Game::updateFantasma() {
 
+    if (this->protoFantasma->getBounds().left < 5) {
+        protoFantasma->canMoveLeft = false;
+    }
+    if (this->protoFantasma->getBounds().left + 65 > 600) {
+        protoFantasma->canMoveRight = false;
+    }
+    if (this->protoFantasma->getBounds().top < 5) {
+        protoFantasma->canMoveUp = false;
+    }
+    if (this->protoFantasma->getBounds().top + 65 > 600) {
+        protoFantasma->canMoveDown = false;
+    }
 
-    if (protoFantasma->getPos().x > playerPos.x && protoFantasma->canMoveLeft) {
+    if (this->protoFantasma->isChasing) {
+        if (protoFantasma->getPos().x > playerPos.x && protoFantasma->canMoveLeft) {
 
-        this->protoFantasma->isMovingLeft = true;
-        this->protoFantasma->isMovingDown = false;
-        this->protoFantasma->isMovingUp = false;
-        this->protoFantasma->isMovingRight = false;
-
-        this->protoFantasma->canMoveRight = true;
-
-
-        protoFantasma->move(-1.f, 0.f);
-
-    } else if (protoFantasma->getPos().x < playerPos.x && protoFantasma->canMoveRight) {
-        this->protoFantasma->isMovingRight = true;
-        this->protoFantasma->isMovingDown = false;
-        this->protoFantasma->isMovingUp = false;
-        this->protoFantasma->isMovingLeft = false;
-
-        this->protoFantasma->canMoveLeft = true;
-
-        protoFantasma->move(1.f, 0.f);
-
-
-    } else if (protoFantasma->getPos().y > playerPos.y && protoFantasma->canMoveUp) {
-        this->protoFantasma->isMovingUp = true;
-        this->protoFantasma->isMovingDown = false;
-        this->protoFantasma->isMovingRight = false;
-        this->protoFantasma->isMovingLeft = false;
+            this->protoFantasma->isMovingLeft = true;
+            this->protoFantasma->isMovingDown = false;
+            this->protoFantasma->isMovingUp = false;
+            this->protoFantasma->isMovingRight = false;
+            this->protoFantasma->canMoveRight = true;
 
 
-        this->protoFantasma->canMoveDown = true;
+            protoFantasma->move(-1.f, 0.f);
+
+        } else if (protoFantasma->getPos().x < playerPos.x && protoFantasma->canMoveRight) {
+            this->protoFantasma->isMovingRight = true;
+            this->protoFantasma->isMovingDown = false;
+            this->protoFantasma->isMovingUp = false;
+            this->protoFantasma->isMovingLeft = false;
+
+            this->protoFantasma->canMoveLeft = true;
+
+            protoFantasma->move(1.f, 0.f);
 
 
-        protoFantasma->move(0, -1.f);
-
-    } else if (protoFantasma->getPos().y < playerPos.y && protoFantasma->canMoveDown) {
-        this->protoFantasma->isMovingDown = true;
-        this->protoFantasma->isMovingUp = false;
-        this->protoFantasma->isMovingRight = false;
-        this->protoFantasma->isMovingLeft = false;
-
-        this->protoFantasma->canMoveUp = true;
+        } else if (protoFantasma->getPos().y > playerPos.y && protoFantasma->canMoveUp) {
+            this->protoFantasma->isMovingUp = true;
+            this->protoFantasma->isMovingDown = false;
+            this->protoFantasma->isMovingRight = false;
+            this->protoFantasma->isMovingLeft = false;
 
 
-        protoFantasma->move(0, 1.f);
+            this->protoFantasma->canMoveDown = true;
 
 
-    } if (protoFantasma->getBounds().intersects(this->player->getBounds())) {
-        respawnPlayer();
-        this->liveCounter--;
+            protoFantasma->move(0, -1.f);
+
+        } else if (protoFantasma->getPos().y < playerPos.y && protoFantasma->canMoveDown) {
+            this->protoFantasma->isMovingDown = true;
+            this->protoFantasma->isMovingUp = false;
+            this->protoFantasma->isMovingRight = false;
+            this->protoFantasma->isMovingLeft = false;
+
+            this->protoFantasma->canMoveUp = true;
 
 
+            protoFantasma->move(0, 1.f);
+
+
+        }
+        if (protoFantasma->getBounds().intersects(this->player->getBounds())) {
+            respawnPlayer();
+            this->liveCounter--;
+
+
+        }
+
+
+    } else if (this->protoFantasma->isScattering) {
+
+        //condicones de scatter
+    } else if (this->protoFantasma->isSearching) {
+        //condicones de busqueda de powerup
     }
 
 
 }
+
 
 void Game::update() {
 

@@ -2,6 +2,7 @@
 // Created by vortizc on 4/28/23.
 //
 #include <iostream>
+#include <cstdlib>
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include "Fantasma.h"
@@ -42,6 +43,7 @@ private:
     void initMap();
     void initText();
     void initPowerUpList();
+
     void initPOINTS();
     void spawnPowerUp();
     void respawnPlayer();
@@ -61,7 +63,17 @@ private:
     PointLinkedList* POINTS;
     PowerUpLinkedList* POWERUPS;
 
+    std::vector<sf::Vector2f> Astar(sf::Vector2f start,sf::Vector2f finish);
+    int manhattanDist(sf::Vector2f currentPosition,sf::Vector2f finish);
+
     sf::Vector2f playerPos;
+
+    struct Node {
+        sf::Vector2f tilePosition;
+        int h; // estimated cost from this node to goal node
+        Node* parent; // parent node in the path
+    };
+
 
     bool spawnedPowerUp;
 
