@@ -287,12 +287,12 @@ std::vector<sf::Vector2f> Game::Astar(sf::Vector2f start, sf::Vector2f finish) {
     //Se agrega nodo inicial a openList
 
     openList.push_back(startNode);
-    std::cout<<openList[0]->h<<std::endl;
+    std::cout << openList[0]->h << std::endl;
     while (!openList.empty()) {
         //se busca el indice del nodo con menor distancia manhattan
         int lowestIndex = 0;
 
-        for (int i = 0; i< openList.size(); i++) {
+        for (int i = 0; i < openList.size(); i++) {
             if (openList[i]->h < openList[lowestIndex]->h) {
                 lowestIndex = i;
             }
@@ -536,11 +536,21 @@ void Game::updatePlayerPos() {
     this->playerPos = player->getPos();
 }
 
-void Game::moveToPowerup(std::vector<sf::Vector2f> path){
-
-    for(auto node: path){
+void Game::moveToPowerup() {
 
 
+    if (this->protoFantasma->getPos() == this->protoFantasma->pathToPowerUp[0]) {
+        this->protoFantasma->pathToPowerUp.erase(this->protoFantasma->pathToPowerUp.begin());
+        return;
+
+    } else if (this->protoFantasma->getPos().x > this->protoFantasma->pathToPowerUp[0].x) {
+        this->protoFantasma->move(-1.f, 0);
+    } else if (this->protoFantasma->getPos().x < this->protoFantasma->pathToPowerUp[0].x) {
+        this->protoFantasma->move(1.f, 0);
+    } else if (this->protoFantasma->getPos().y > this->protoFantasma->pathToPowerUp[0].y) {
+        this->protoFantasma->move(0, -1.f);
+    } else if (this->protoFantasma->getPos().y < this->protoFantasma->pathToPowerUp[0].y) {
+        this->protoFantasma->move(0, 1.f);
     }
 
 }
@@ -619,15 +629,16 @@ void Game::updateFantasma() {
     } else if (this->protoFantasma->isScattering) {
 
         //condicones de scatter
-    } else if (this->protoFantasma->isSearching && !pathMade) {
+    } else if (this->protoFantasma->isSearching) {
 
-        std::vector<sf::Vector2f> path =Astar(this->protoFantasma->getPos(), this->POWERUPS->head->powerUp->getPos());
-        pathMade = true;
-
-        for(auto node : path){
-
-            std::cout<<"Posición X: "<<node.x<< " Posición Y: "<<node.y<<std::endl;
+        if (!pathMade) {
+            std::vector<sf::Vector2f> path = Astar(this->protoFantasma->getPos(),
+                                                   this->POWERUPS->head->powerUp->getPos());
+            protoFantasma->pathToPowerUp = path;
+            pathMade = true;
         }
+        moveToPowerup();
+
 
     }
 

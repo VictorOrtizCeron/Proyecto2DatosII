@@ -29,7 +29,7 @@ public:
     bool isChasing;
     bool isSearching;
     bool isScattering;
-
+    std::vector<sf::Vector2f> pathToPowerUp;
 private:
     int Type;
     float movementSpeed;
