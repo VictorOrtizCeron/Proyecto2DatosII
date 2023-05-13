@@ -249,12 +249,6 @@ void Game::updatePowerUps() {
     if (pointCounter % 200 != 0 && spawnedPowerUp) {
         spawnedPowerUp = false;
     }
-    if (this->POWERUPS->head == nullptr) {
-        this->protoFantasma->isSearching = false;
-        this->protoFantasma->isChasing = true;
-        this->protoFantasma->isScattering = false;
-
-    }
 
     PowerUpNode *current = this->POWERUPS->head;
 
@@ -262,11 +256,22 @@ void Game::updatePowerUps() {
 
         if (current->powerUp->getBounds().intersects(this->player->getBounds())) {
             PowerUp *powerUpPTR = POWERUPS->removePowerUp(current->powerUp);
+            this->protoFantasma->isSearching = false;
+            this->protoFantasma->isChasing = true;
+            this->protoFantasma->isScattering = false;
+            pathMade = false;
             delete powerUpPTR;
-        } else if (current->powerUp->getBounds().intersects(this->protoFantasma->getBounds())) {
-
+        }if (current->powerUp->getBounds().intersects(this->protoFantasma->getBounds())) {
             PowerUp *powerUpPTR = POWERUPS->removePowerUp(current->powerUp);
+
+            this->protoFantasma->isSearching = false;
+            this->protoFantasma->isChasing = true;
+            this->protoFantasma->isScattering = false;
+            pathMade = false;
+
             delete powerUpPTR;
+
+
         }
         current = current->nextPowerUp;
     }
@@ -287,7 +292,7 @@ std::vector<sf::Vector2f> Game::Astar(sf::Vector2f start, sf::Vector2f finish) {
     //Se agrega nodo inicial a openList
 
     openList.push_back(startNode);
-    std::cout << openList[0]->h << std::endl;
+    //std::cout << openList[0]->h << std::endl;
     while (!openList.empty()) {
         //se busca el indice del nodo con menor distancia manhattan
         int lowestIndex = 0;
@@ -539,9 +544,16 @@ void Game::updatePlayerPos() {
 void Game::moveToPowerup() {
 
 
-    if (this->protoFantasma->getPos() == this->protoFantasma->pathToPowerUp[0]) {
+    //std::cout<<this->protoFantasma->pathToPowerUp[0].x<<std::endl;
+    //std::cout<<this->protoFantasma->pathToPowerUp[0].y<<std::endl;
+
+
+    if (this->protoFantasma->getPos().x == this->protoFantasma->pathToPowerUp[0].x && this->protoFantasma->getPos().y == this->protoFantasma->pathToPowerUp[0].y ) {
         this->protoFantasma->pathToPowerUp.erase(this->protoFantasma->pathToPowerUp.begin());
+
+
         return;
+
 
     } else if (this->protoFantasma->getPos().x > this->protoFantasma->pathToPowerUp[0].x) {
         this->protoFantasma->move(-1.f, 0);
@@ -632,13 +644,15 @@ void Game::updateFantasma() {
     } else if (this->protoFantasma->isSearching) {
 
         if (!pathMade) {
+            //this->protoFantasma->pathToPowerUp.clear();
             std::vector<sf::Vector2f> path = Astar(this->protoFantasma->getPos(),
                                                    this->POWERUPS->head->powerUp->getPos());
             protoFantasma->pathToPowerUp = path;
+
             pathMade = true;
         }
-        moveToPowerup();
 
+        moveToPowerup();
 
     }
 
@@ -651,11 +665,13 @@ void Game::update() {
     this->updatePollEvents();
     this->updateInput();
     this->updatePlayerPos();
+    this->updatePoints();
+    this->updatePowerUps();
     this->updateFantasma();
     this->updateMap();
-    this->updatePoints();
+
     this->updateText();
-    this->updatePowerUps();
+
 
 }
 
