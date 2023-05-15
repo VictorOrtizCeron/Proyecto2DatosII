@@ -43,7 +43,6 @@ private:
     void initMap();
     void initText();
     void initPowerUpList();
-
     void initPOINTS();
     void spawnPowerUp();
     void respawnPlayer();
@@ -63,16 +62,20 @@ private:
     sf::RectangleShape TILE_MAP[ROWS][COLS];
     PointLinkedList* POINTS;
     PowerUpLinkedList* POWERUPS;
-
     std::vector<sf::Vector2f> Astar(sf::Vector2f start,sf::Vector2f finish);
+    std::vector<sf::Vector2f> Backtracking(sf::Vector2f start,sf::Vector2f finish);
     int manhattanDist(sf::Vector2f currentPosition,sf::Vector2f finish);
-
     sf::Vector2f playerPos;
-
+    std::vector<int> getIndex(sf::Vector2f pos);
     struct Node {
         sf::Vector2f tilePosition;
         int h; // estimated cost from this node to goal node
         Node* parent; // parent node in the path
+    };
+    struct NodeBacktrack {
+        std::vector<int> tilePosition;
+
+        NodeBacktrack* parent; // parent node in the path
     };
 
 

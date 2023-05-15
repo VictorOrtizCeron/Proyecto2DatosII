@@ -15,8 +15,8 @@ public:
 
     virtual ~PointNode();
 
-    PointNode *nextPoint{};
-    Point *point{};
+    PointNode *nextPoint;
+    Point *point;
 };
 
 
