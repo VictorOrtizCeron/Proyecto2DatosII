@@ -29,24 +29,27 @@ public:
     void updatePollEvents();
     void renderMap();
     void renderText();
+    void renderFantasmas();
     void updateText();
     void updateMap();
     void updatePoints();
     void updatePowerUps();
     void updateFantasma();
+    void updateFantasmas();
     void updatePlayerPos();
 
 private:
     sf::RenderWindow* window;
     void initPlayer();
     void initFantasma();
+    void initFantasmas();
     void initMap();
     void initText();
     void initPowerUpList();
     void initPOINTS();
     void spawnPowerUp();
     void respawnPlayer();
-    void moveToPowerup();
+    void moveToPowerup(Fantasma* fantasma);
     PowerUp*powerUp;
     sf::Text text[Max_inGame];
     sf::Font minecraftFont;
@@ -67,9 +70,12 @@ private:
     int manhattanDist(sf::Vector2f currentPosition,sf::Vector2f finish);
     sf::Vector2f playerPos;
     std::vector<int> getIndex(sf::Vector2f pos);
+    std::vector<Fantasma*> fantasmas;
     struct Node {
-        sf::Vector2f tilePosition;
-        int h; // estimated cost from this node to goal node
+        std::vector<int> tilePosition;
+        int G;//costo de movimiento
+        int H;//dist manhattan
+        int F; // Puntaje Total de celda
         Node* parent; // parent node in the path
     };
     struct NodeBacktrack {

@@ -29,9 +29,11 @@ public:
     bool isChasing;
     bool isSearching;
     bool isScattering;
+    bool pathMade;
     std::vector<sf::Vector2f> pathToPowerUp;
-private:
     int Type;
+private:
+
     float movementSpeed;
     void initVariables();
     void initTexture(int type);

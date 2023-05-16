@@ -20,7 +20,7 @@ Fantasma::Fantasma(int type) {
     isChasing = true;
     isSearching= false;
     isScattering = false;
-
+    pathMade = false;
 
 }
 
