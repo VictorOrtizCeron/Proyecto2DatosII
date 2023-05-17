@@ -34,14 +34,13 @@ public:
     void updateMap();
     void updatePoints();
     void updatePowerUps();
-    void updateFantasma();
+    void updateLevel();
     void updateFantasmas();
     void updatePlayerPos();
 
 private:
     sf::RenderWindow* window;
     void initPlayer();
-    void initFantasma();
     void initFantasmas();
     void initMap();
     void initText();
@@ -54,7 +53,6 @@ private:
     sf::Text text[Max_inGame];
     sf::Font minecraftFont;
     Player * player;
-    Fantasma * protoFantasma;
     int liveCounter;
     int pointCounter;
     int levelCounter;

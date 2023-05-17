@@ -41,44 +41,199 @@ void Game::initText() {
 
 void Game::initMap() {
 
-    this->POINTS = new PointLinkedList();
+
     this->TILE_SIZE = 60;
-    int tileMap[10][10] = {
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+    if(this->levelCounter == 1) {
+        this->POINTS = new PointLinkedList();
+        int tileMap[10][10] = {
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 
-    };
+        };
 
 
-    for (int y = 0; y < 10; y++) {
-        for (int x = 0; x < 10; x++) {
-            if (tileMap[y][x] == 1) {
-                this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
-                this->TILE_MAP[y][x].setFillColor(sf::Color::Transparent);
-                this->TILE_MAP[y][x].setOutlineThickness(-2);
-                this->TILE_MAP[y][x].setOutlineColor(sf::Color::Blue);
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
 
-            } else {
-                this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
-                this->TILE_MAP[y][x].setFillColor(sf::Color::Black);
+                if (tileMap[y][x] == 1) {
+                    this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+                    this->TILE_MAP[y][x].setFillColor(sf::Color::Transparent);
+                    this->TILE_MAP[y][x].setOutlineThickness(-2);
+                    this->TILE_MAP[y][x].setOutlineColor(sf::Color::Blue);
 
-                Point *newPoint = new Point();
-                newPoint->setPosition(x * TILE_SIZE + 25, y * TILE_SIZE + 25);
+                } else {
+                    this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+                    this->TILE_MAP[y][x].setFillColor(sf::Color::Black);
 
-                POINTS->addFirst(newPoint);
+                    Point *newPoint = new Point();
+                    newPoint->setPosition(x * TILE_SIZE + 25, y * TILE_SIZE + 25);
+
+                    POINTS->addFirst(newPoint);
+
+                }
+                this->TILE_MAP[y][x].setPosition(x * TILE_SIZE, y * TILE_SIZE);
 
             }
-            this->TILE_MAP[y][x].setPosition(x * TILE_SIZE, y * TILE_SIZE);
+        }
+    }
+    if(this->levelCounter == 2) {
+        PointNode* current = this->POINTS->head;
+        while( current != nullptr){
+           this->POINTS->removeFirst();
+           current = current->nextPoint;
+        }
+        int tileMap[10][10] = {
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
+
+        };
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
+                TILE_MAP[y][x].setFillColor(sf::Color::Black);
+
+                TILE_MAP[y][x].setOutlineThickness(0);
+            }
+        }
+
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
+                if (tileMap[y][x] == 1) {
+                    this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+                    this->TILE_MAP[y][x].setFillColor(sf::Color::Transparent);
+                    this->TILE_MAP[y][x].setOutlineThickness(-2);
+                    this->TILE_MAP[y][x].setOutlineColor(sf::Color::Blue);
+
+                } else {
+                    this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+                    this->TILE_MAP[y][x].setFillColor(sf::Color::Black);
+
+                    Point *newPoint = new Point();
+                    newPoint->setPosition(x * TILE_SIZE + 25, y * TILE_SIZE + 25);
+
+                    POINTS->addFirst(newPoint);
+
+                }
+                this->TILE_MAP[y][x].setPosition(x * TILE_SIZE, y * TILE_SIZE);
+
+            }
+        }
+    }
+    if(this->levelCounter == 3) {
+        PointNode* current = this->POINTS->head;
+        while( current != nullptr){
+            this->POINTS->removeFirst();
+            current = current->nextPoint;
+        }
+        int tileMap[10][10] = {
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+                {0, 0, 1, 1, 1, 1, 1, 1, 0, 0},
+                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
+
+        };
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
+                TILE_MAP[y][x].setFillColor(sf::Color::Black);
+                TILE_MAP[y][x].setOutlineThickness(0);
+            }
+        }
+
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
+                if (tileMap[y][x] == 1) {
+                    this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+                    this->TILE_MAP[y][x].setFillColor(sf::Color::Transparent);
+                    this->TILE_MAP[y][x].setOutlineThickness(-2);
+                    this->TILE_MAP[y][x].setOutlineColor(sf::Color::Blue);
+
+                } else {
+                    this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+                    this->TILE_MAP[y][x].setFillColor(sf::Color::Black);
+
+                    Point *newPoint = new Point();
+                    newPoint->setPosition(x * TILE_SIZE + 25, y * TILE_SIZE + 25);
+
+                    POINTS->addFirst(newPoint);
+
+                }
+                this->TILE_MAP[y][x].setPosition(x * TILE_SIZE, y * TILE_SIZE);
+
+            }
+        }
+    }
+    if(this->levelCounter == 4) {
+        PointNode* current = this->POINTS->head;
+        while( current != nullptr){
+            this->POINTS->removeFirst();
+            current = current->nextPoint;
+        }
+        int tileMap[10][10] = {
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 1, 1, 1, 1, 0, 0, 0},
+                {0, 0, 0, 1, 1, 1, 1, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
+
+        };
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
+                TILE_MAP[y][x].setFillColor(sf::Color::Black);
+                TILE_MAP[y][x].setOutlineThickness(0);
+            }
+        }
+
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
+                if (tileMap[y][x] == 1) {
+                    this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+                    this->TILE_MAP[y][x].setFillColor(sf::Color::Transparent);
+                    this->TILE_MAP[y][x].setOutlineThickness(-2);
+                    this->TILE_MAP[y][x].setOutlineColor(sf::Color::Blue);
+
+                } else {
+                    this->TILE_MAP[y][x].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+                    this->TILE_MAP[y][x].setFillColor(sf::Color::Black);
+
+                    Point *newPoint = new Point();
+                    newPoint->setPosition(x * TILE_SIZE + 25, y * TILE_SIZE + 25);
+
+                    POINTS->addFirst(newPoint);
+
+                }
+                this->TILE_MAP[y][x].setPosition(x * TILE_SIZE, y * TILE_SIZE);
+
+            }
         }
     }
 
@@ -99,15 +254,11 @@ void Game::initPlayer() {
     this->playerPos = player->getPos();
 }
 
-void Game::initFantasma() {
-    this->protoFantasma = new Fantasma(3);
-    protoFantasma->circulo.setPosition(60 * 8, 60 * 8);
-}
 
 void Game::initFantasmas() {
 
     for (int i = 0; i < 2; i++) {
-        std::cout << i << std::endl;
+
         Fantasma *newGhost = new Fantasma(i + 1);
         if (i == 0) {
             newGhost->circulo.setPosition(540, 540);
@@ -130,11 +281,11 @@ Game::Game() {
 
     this->initPlayer();
     this->initFantasmas();
-    this->initFantasma();
+    levelCounter = 1;
     this->initMap();
     this->initPowerUpList();
     this->initText();
-    levelCounter = 1;
+
     pointCounter = 0;
     liveCounter = 3;
     this->spawnedPowerUp = false;
@@ -245,6 +396,7 @@ void Game::spawnPowerUp() {
 
         PowerUp *newPowerUp = new PowerUp();
         newPowerUp->setPosition(this->TILE_SIZE * x + 20, this->TILE_SIZE * y + 20);
+
         POWERUPS->addFirst(newPowerUp);
         for (auto &fantasma: fantasmas) {
 
@@ -309,6 +461,16 @@ void Game::updatePowerUps() {
 
 }
 
+void Game::updateLevel() {
+    if (this->POINTS->head == nullptr) {
+        this->levelCounter ++;
+
+        initMap();
+        this->player->setPosition(60,60);
+
+    }
+}
+
 std::vector<sf::Vector2f> Game::Astar(sf::Vector2f start, sf::Vector2f finish) {
 
     //Se define vector de camino para retornar
@@ -323,7 +485,7 @@ std::vector<sf::Vector2f> Game::Astar(sf::Vector2f start, sf::Vector2f finish) {
                                manhattanDist(start, finish),
                                0,
                                nullptr};
-    Node *endNode = new Node{getIndex(finish), 0, 0,0, nullptr};
+    Node *endNode = new Node{getIndex(finish), 0, 0, 0, nullptr};
 
     //Se agrega nodo inicial a openList
 
@@ -382,13 +544,13 @@ std::vector<sf::Vector2f> Game::Astar(sf::Vector2f start, sf::Vector2f finish) {
                     continue;
                 }
                 // Create the successor node
-                std::vector<int> newNodePos = {xPos,yPos};
+                std::vector<int> newNodePos = {xPos, yPos};
 
                 sf::Vector2f position = sf::Vector2f(newNodePos[0] * 60, newNodePos[1] * 60);
                 Node *successor = new Node{newNodePos,
                                            currentNode->G + 10,
                                            manhattanDist(position, finish),
-                                           currentNode->G+10+ manhattanDist(position, finish),
+                                           currentNode->G + 10 + manhattanDist(position, finish),
                                            currentNode};
 
                 //Checkea si el nodo ya esta en alguna de las listas
@@ -479,7 +641,7 @@ std::vector<sf::Vector2f> Game::Backtracking(sf::Vector2f start, sf::Vector2f fi
 
 
                 //se inserta en la lista de camino
-                path.push_back(sf::Vector2f(node->tilePosition[0] * 60, node->tilePosition[1] * 60));
+                path.insert(path.begin(), sf::Vector2f(node->tilePosition[0] * 60, node->tilePosition[1] * 60));
                 node = node->parent;
             }
             //se da vuelta a lista de camino para que vaya desde inicio a fin
@@ -491,15 +653,21 @@ std::vector<sf::Vector2f> Game::Backtracking(sf::Vector2f start, sf::Vector2f fi
 
         for (int y = -1; y <= 1; y++) {
             for (int x = -1; x <= 1; x++) {
+
                 //ignora el caso diagonal
                 if (x != 0 && y != 0) {
+
                     continue;
                 }
                 int succesorIndexX = currentNode->tilePosition[0] + x;
                 int succesorIndexY = currentNode->tilePosition[1] + y;
+
+
+
                 // Ignora posiciones fuera del mapa
-                if (succesorIndexX * 60 < 0 || succesorIndexX * 60 > 600 || succesorIndexY < 0 ||
+                if (succesorIndexX * 60 < 0 || succesorIndexX * 60 > 540 || succesorIndexY < 0 ||
                     succesorIndexY * 60 > 540) {
+
                     continue;
                 }
                 //ignora obstáculos
@@ -507,6 +675,8 @@ std::vector<sf::Vector2f> Game::Backtracking(sf::Vector2f start, sf::Vector2f fi
 
                     continue;
                 }
+
+
                 std::vector succesorNodeVec = {succesorIndexX, succesorIndexY};
 
                 NodeBacktrack *successor = new NodeBacktrack{succesorNodeVec, currentNode};
@@ -522,6 +692,7 @@ std::vector<sf::Vector2f> Game::Backtracking(sf::Vector2f start, sf::Vector2f fi
                     }
                 }
                 if (visited) {
+
                     continue;
                 } else { successors.push_back(successor); }
 
@@ -766,7 +937,7 @@ void Game::updateFantasmas() {
 
             }
             if (fantasma->getBounds().intersects(this->player->getBounds())) {
-                respawnPlayer();
+                //respawnPlayer();
                 this->liveCounter--;
 
 
@@ -786,12 +957,19 @@ void Game::updateFantasmas() {
                     std::vector<sf::Vector2f> path = Backtracking(fantasma->getPos(),
                                                                   this->POWERUPS->head->powerUp->getPos());
                     fantasma->pathToPowerUp = path;
-
+                    std::cout << "Posición X Fantasma " << fantasma->getPos().x / 60 << " Posición Y Fantasma "
+                              << fantasma->getPos().y / 60 << std::endl;
+                    for (auto &node: path) {
+                        std::cout << "Posición X " << node.x / 60 << " Posición Y " << node.y / 60 << std::endl;
+                    }
                 }
                 if (fantasma->Type == 2) {
                     //fantasma Verde usa A estrella
                     std::vector<sf::Vector2f> path = Astar(fantasma->getPos(),
                                                            this->POWERUPS->head->powerUp->getPos());
+
+                    //std::vector<sf::Vector2f> path = Backtracking(fantasma->getPos(),
+                    //                                             this->POWERUPS->head->powerUp->getPos());
                     fantasma->pathToPowerUp = path;
 
 
@@ -845,6 +1023,8 @@ void Game::renderFantasmas() {
 void Game::render() {
 
     this->window->clear();
+    this->updateLevel();
+
     this->renderMap();
     this->renderText();
 
@@ -854,7 +1034,6 @@ void Game::render() {
     this->player->render(*this->window);
 
     this->renderFantasmas();
-
 
     this->window->display();
 
