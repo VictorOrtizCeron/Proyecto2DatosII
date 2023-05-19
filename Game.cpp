@@ -36,7 +36,9 @@ void Game::initText() {
     this->text[2].setFillColor(sf::Color::White);
     this->text[2].setPosition(340, 630);
 
-
+    this->text[3].setFont(this->minecraftFont);
+    this->text[3].setString("");
+    this->text[3].setCharacterSize(40);
 }
 
 void Game::initMap() {
@@ -236,6 +238,13 @@ void Game::initMap() {
             }
         }
     }
+    if(this->levelCounter == 5) {
+        this->gameOver = true;
+        this->text[3].setString("Game OVER");
+
+        this->text[3].setPosition(180,200);
+        this->text[1].setPosition(180,160);
+    }
 
 }
 
@@ -277,6 +286,7 @@ void Game::initPowerUpList() {
 }
 
 Game::Game() {
+    this->gameOver = false;
     this->initWindow();
 
     this->initPlayer();
@@ -309,70 +319,79 @@ void Game::updatePollEvents() {
 
 void Game::updateInput() {
 
-    this->player->canMoveLeft = true;
-    this->player->canMoveRight = true;
-    this->player->canMoveUp = true;
-    this->player->canMoveDown = true;
+    if(!gameOver) {
 
-    if (this->player->getBounds().left < 5 || player->collisionLeft) {
-        player->canMoveLeft = false;
-    }
-    if (this->player->getBounds().left + 65 > 600 || player->collisionRight) {
-        player->canMoveRight = false;
-    }
-    if (this->player->getBounds().top < 5 || player->collisionTop) {
-        player->canMoveUp = false;
-    }
-    if (this->player->getBounds().top + 65 > 600 || player->collisionBot) {
-        player->canMoveDown = false;
-    }
-
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && player->canMoveUp) {
-
-        this->player->isMovingUp = true;
-        this->player->isMovingDown = false;
-        this->player->canMoveDown = true;
-        this->player->canMoveLeft = false;
-        this->player->canMoveRight = false;
-        player->collisionBot = false;
-        this->player->move(0, -2.f);
-
-    }
-
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && player->canMoveDown) {
-        this->player->isMovingDown = true;
-        this->player->isMovingUp = false;
-        this->player->canMoveUp = true;
-        this->player->canMoveLeft = false;
-        this->player->canMoveRight = false;
-        this->player->collisionTop = false;
-        this->player->move(0, 2.f);
-
-    }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && player->canMoveLeft) {
-        this->player->isMovingLeft = true;
-        this->player->isMovingRight = false;
-        this->player->canMoveRight = true;
-
-        player->collisionRight = false;
-
-        this->player->move(-2.f, 0);
-
-    }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && player->canMoveRight) {
-        this->player->isMovingRight = true;
-        this->player->isMovingLeft = false;
         this->player->canMoveLeft = true;
-        this->player->collisionLeft = false;
-        this->player->move(2.f, 0);
+        this->player->canMoveRight = true;
+        this->player->canMoveUp = true;
+        this->player->canMoveDown = true;
 
+        if (this->player->getBounds().left < 5 || player->collisionLeft) {
+            player->canMoveLeft = false;
+        }
+        if (this->player->getBounds().left + 65 > 600 || player->collisionRight) {
+            player->canMoveRight = false;
+        }
+        if (this->player->getBounds().top < 5 || player->collisionTop) {
+            player->canMoveUp = false;
+        }
+        if (this->player->getBounds().top + 65 > 600 || player->collisionBot) {
+            player->canMoveDown = false;
+        }
+
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && player->canMoveUp) {
+
+            this->player->isMovingUp = true;
+            this->player->isMovingDown = false;
+            this->player->canMoveDown = true;
+            this->player->canMoveLeft = false;
+            this->player->canMoveRight = false;
+            player->collisionBot = false;
+            this->player->move(0, -2.f);
+
+        }
+
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && player->canMoveDown) {
+            this->player->isMovingDown = true;
+            this->player->isMovingUp = false;
+            this->player->canMoveUp = true;
+            this->player->canMoveLeft = false;
+            this->player->canMoveRight = false;
+            this->player->collisionTop = false;
+            this->player->move(0, 2.f);
+
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && player->canMoveLeft) {
+            this->player->isMovingLeft = true;
+            this->player->isMovingRight = false;
+            this->player->canMoveRight = true;
+
+            player->collisionRight = false;
+
+            this->player->move(-2.f, 0);
+
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && player->canMoveRight) {
+            this->player->isMovingRight = true;
+            this->player->isMovingLeft = false;
+            this->player->canMoveLeft = true;
+            this->player->collisionLeft = false;
+            this->player->move(2.f, 0);
+
+        }
+        if(liveCounter == 0) {
+            this->gameOver = true;
+            this->text[3].setString("Game OVER");
+            this->text[2].setString("");
+            this->text[0].setString("");
+            this->text[3].setPosition(180, 200);
+            this->text[1].setPosition(180, 160);
+        }
     }
-
-
 }
 
 void Game::respawnPlayer() {
@@ -464,7 +483,6 @@ void Game::updatePowerUps() {
 void Game::updateLevel() {
     if (this->POINTS->head == nullptr) {
         this->levelCounter ++;
-
         initMap();
         this->player->setPosition(60,60);
 
@@ -829,6 +847,10 @@ void Game::updateText() {
     this->text[1].setString("Points: " + std::to_string(pointCounter));
     this->text[2].setString("Level: " + std::to_string(levelCounter));
 
+    if(gameOver){
+        this->text[0].setString("" );
+        this->text[2].setString("");
+    }
 }
 
 void Game::renderText() {
@@ -937,7 +959,7 @@ void Game::updateFantasmas() {
 
             }
             if (fantasma->getBounds().intersects(this->player->getBounds())) {
-                //respawnPlayer();
+                respawnPlayer();
                 this->liveCounter--;
 
 
@@ -1026,7 +1048,7 @@ void Game::render() {
     this->updateLevel();
 
     this->renderMap();
-    this->renderText();
+
 
     this->POINTS->renderPointList(*this->window);
     this->POWERUPS->renderPowerUpList(*this->window);
@@ -1034,7 +1056,7 @@ void Game::render() {
     this->player->render(*this->window);
 
     this->renderFantasmas();
-
+    this->renderText();
     this->window->display();
 
 }

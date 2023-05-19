@@ -69,6 +69,7 @@ private:
     sf::Vector2f playerPos;
     std::vector<int> getIndex(sf::Vector2f pos);
     std::vector<Fantasma*> fantasmas;
+    bool gameOver;
     struct Node {
         std::vector<int> tilePosition;
         int G;//costo de movimiento
