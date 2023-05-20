@@ -4,6 +4,7 @@
 
 #include <stack>
 #include "Game.h"
+
 //método incializador de ventana
 void Game::initWindow() {
 
@@ -11,6 +12,7 @@ void Game::initWindow() {
     this->window->setFramerateLimit(60);
     this->window->setVerticalSyncEnabled(false);
 }
+
 //método inicializador de texto
 void Game::initText() {
 
@@ -40,13 +42,14 @@ void Game::initText() {
     this->text[3].setString("");
     this->text[3].setCharacterSize(40);
 }
+
 //método inicializador de mapas para todos los niveles
 void Game::initMap() {
 
 
     this->TILE_SIZE = 60;
     //condicional para primer nivel
-    if(this->levelCounter == 1) {
+    if (this->levelCounter == 1) {
         this->POINTS = new PointLinkedList();//inicio de lista enlazada de puntos
         int tileMap[10][10] = {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -89,12 +92,12 @@ void Game::initMap() {
         }
     }
     //condicional para segundo nivel
-    if(this->levelCounter == 2) {
-        PointNode* current = this->POINTS->head;
+    if (this->levelCounter == 2) {
+        PointNode *current = this->POINTS->head;
         //limpieza de lista enlazada de puntos (reinicialización)
-        while( current != nullptr){
-           this->POINTS->removeFirst();
-           current = current->nextPoint;
+        while (current != nullptr) {
+            this->POINTS->removeFirst();
+            current = current->nextPoint;
         }
         int tileMap[10][10] = {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -143,10 +146,10 @@ void Game::initMap() {
         }
     }
     //condicional para tercer nivel
-    if(this->levelCounter == 3) {
-        PointNode* current = this->POINTS->head;
+    if (this->levelCounter == 3) {
+        PointNode *current = this->POINTS->head;
         //limpieza de lista enlazada de puntos (reinicialización)
-        while( current != nullptr){
+        while (current != nullptr) {
             this->POINTS->removeFirst();
             current = current->nextPoint;
         }
@@ -196,10 +199,10 @@ void Game::initMap() {
         }
     }
     //condicional para cuarto nivel
-    if(this->levelCounter == 4) {
-        PointNode* current = this->POINTS->head;
+    if (this->levelCounter == 4) {
+        PointNode *current = this->POINTS->head;
         //limpieza de lista enlazada de puntos (reinicialización)
-        while( current != nullptr){
+        while (current != nullptr) {
             this->POINTS->removeFirst();
             current = current->nextPoint;
         }
@@ -249,15 +252,16 @@ void Game::initMap() {
         }
     }
     //condicional de fin de juego
-    if(this->levelCounter == 5) {
+    if (this->levelCounter == 5) {
         this->gameOver = true;
         this->text[3].setString("Game OVER");
 
-        this->text[3].setPosition(180,200);
-        this->text[1].setPosition(180,160);
+        this->text[3].setPosition(180, 200);
+        this->text[1].setPosition(180, 160);
     }
 
 }
+
 //renderizador de mapap
 void Game::renderMap() {
 
@@ -267,11 +271,13 @@ void Game::renderMap() {
         }
     }
 }
+
 //inicializador de jugador
 void Game::initPlayer() {
     this->player = new Player();
     this->playerPos = player->getPos();
 }
+
 //inicializador de vector de fantasmas
 void Game::initFantasmas() {
     //se utiliza el vector de fantasmas. Solo se manejan 2 fantasmas
@@ -289,10 +295,12 @@ void Game::initFantasmas() {
 
 
 }
+
 //inicializador de lista enlazada de powerups
 void Game::initPowerUpList() {
     this->POWERUPS = new PowerUpLinkedList();
 }
+
 //constructor de Game
 Game::Game() {
     this->gameOver = false;
@@ -310,11 +318,13 @@ Game::Game() {
     this->spawnedPowerUp = false;
     this->pathMade = false;
 }
+
 //destructor de Game
 Game::~Game() {
     delete this->window;
 
 }
+
 //actualizador de polling de eventos
 void Game::updatePollEvents() {
     sf::Event evento;
@@ -325,10 +335,11 @@ void Game::updatePollEvents() {
             this->window->close();
     }
 }
+
 //actualizador de inputs de jugador
 void Game::updateInput() {
     //condicion de fin de juego
-    if(!gameOver) {
+    if (!gameOver) {
         //reinicio de booleanos de movimiento para detección de colisiones
         this->player->canMoveLeft = true;
         this->player->canMoveRight = true;
@@ -392,7 +403,7 @@ void Game::updateInput() {
             this->player->move(2.f, 0);
 
         }
-        if(liveCounter == 0) {
+        if (liveCounter == 0) {
             this->gameOver = true;
             this->text[3].setString("Game OVER");
             this->text[2].setString("");
@@ -402,6 +413,7 @@ void Game::updateInput() {
         }
     }
 }
+
 //funcion regeneradora de jugador al entrar en contacto con fantasma
 void Game::respawnPlayer() {
     int x = rand() % 10;
@@ -413,6 +425,7 @@ void Game::respawnPlayer() {
         spawnPowerUp();
     }
 }
+
 //funcion de generación de power up en mapa
 void Game::spawnPowerUp() {
 
@@ -439,6 +452,7 @@ void Game::spawnPowerUp() {
     }
 
 }
+
 //función de update de powerups
 void Game::updatePowerUps() {
     //condicionales limitadores de sobrecarga de powerups
@@ -490,25 +504,27 @@ void Game::updatePowerUps() {
     }
 
 }
+
 //función actualizadora de nivel
 void Game::updateLevel() {
     if (this->POINTS->head == nullptr) {
-        this->levelCounter ++;
+        this->levelCounter++;
         initMap();
-        this->player->setPosition(60,60);
+        this->player->setPosition(60, 60);
         int i = 0;
-        for(auto &fantasma:fantasmas){
+        for (auto &fantasma: fantasmas) {
 
-            if( i == 0){
-            fantasma->circulo.setPosition(0,540);}
-            else{
-                fantasma->circulo.setPosition(540,540);
-                }
+            if (i == 0) {
+                fantasma->circulo.setPosition(0, 540);
+            } else {
+                fantasma->circulo.setPosition(540, 540);
+            }
             i++;
         }
 
     }
 }
+
 //Algoritmo A estrella
 std::vector<sf::Vector2f> Game::Astar(sf::Vector2f start, sf::Vector2f finish) {
 
@@ -623,32 +639,34 @@ std::vector<sf::Vector2f> Game::Astar(sf::Vector2f start, sf::Vector2f finish) {
                     openList.push_back(successor);
                 } else {
 
-                        delete(successor);
-                    }
+                    delete (successor);
+                }
 
 
             }
 
 
         }
-        std::cout<<std::endl;
+        std::cout << std::endl;
         //prints solicitados de open list , closed list y el nodo seleccionado.
-        std::cout<< "Nodo Seleccionado:(" << currentNode->tilePosition[0]<<","<<currentNode->tilePosition[1]<<")"<<std::endl;
-        std::cout<<"OpenList:";
-        for(auto &node:openList){
-            std::cout<< " ("<<node->tilePosition[0]<<","<<node->tilePosition[1]<<") ";
+        std::cout << "Nodo Seleccionado:(" << currentNode->tilePosition[0] << "," << currentNode->tilePosition[1] << ")"
+                  << std::endl;
+        std::cout << "OpenList:";
+        for (auto &node: openList) {
+            std::cout << " (" << node->tilePosition[0] << "," << node->tilePosition[1] << ") ";
         }
-        std::cout<<std::endl;
-        std::cout<<"closedList:";
-        for(auto &node:closedList){
-            std::cout<< " ("<<node->tilePosition[0]<<","<<node->tilePosition[1]<<") ";
+        std::cout << std::endl;
+        std::cout << "closedList:";
+        for (auto &node: closedList) {
+            std::cout << " (" << node->tilePosition[0] << "," << node->tilePosition[1] << ") ";
         }
-        std::cout<<std::endl;
+        std::cout << std::endl;
     }
 
 
     return path;
 }
+
 //función auxiliar calculadora de distancia manhattan
 int Game::manhattanDist(sf::Vector2f currentPosition, sf::Vector2f finish) {
     int currentX = currentPosition.x / 60;
@@ -659,7 +677,8 @@ int Game::manhattanDist(sf::Vector2f currentPosition, sf::Vector2f finish) {
     return h;
 
 }
- //Algoritmo de Backtracking
+
+//Algoritmo de Backtracking
 std::vector<sf::Vector2f> Game::Backtracking(sf::Vector2f start, sf::Vector2f finish) {
 
     std::vector startIndex = getIndex(start);
@@ -675,7 +694,8 @@ std::vector<sf::Vector2f> Game::Backtracking(sf::Vector2f start, sf::Vector2f fi
     std::stack<NodeBacktrack *> toBeVisited;
 
     toBeVisited.push(startNode);
-    std::cout<<"Comienzo: "<<" (" << startNode->tilePosition[0] << "," << startNode->tilePosition[1] << ") "<<std::endl;
+    std::cout << "Comienzo: " << " (" << startNode->tilePosition[0] << "," << startNode->tilePosition[1] << ") "
+              << std::endl;
 
     while (!toBeVisited.empty()) {
 
@@ -684,7 +704,8 @@ std::vector<sf::Vector2f> Game::Backtracking(sf::Vector2f start, sf::Vector2f fi
 
         NodeBacktrack *currentNode = toBeVisited.top();
 
-        std::cout<<"Seleccionado: "<<" (" << currentNode->tilePosition[0] << "," << currentNode->tilePosition[1] << ") "<<std::endl;
+        std::cout << "Seleccionado: " << " (" << currentNode->tilePosition[0] << "," << currentNode->tilePosition[1]
+                  << ") " << std::endl;
         toBeVisited.pop();
         //condición finalización de bucle si se encuentra un camino
         if (currentNode->tilePosition == endNode->tilePosition) {
@@ -753,22 +774,22 @@ std::vector<sf::Vector2f> Game::Backtracking(sf::Vector2f start, sf::Vector2f fi
 
         }
         //print de árbol de decisiones
-        std::cout<<"Sucesores: ";
+        std::cout << "Sucesores: ";
         for (auto &node: successors) {
             std::cout << " (" << node->tilePosition[0] << "," << node->tilePosition[1] << ") ";
             toBeVisited.push(node);
         }
 
         std::stack tempStack = toBeVisited;
-        std::cout<<std::endl;
-        std::cout<<"Stack: ";
-            while (!tempStack.empty()) {
+        std::cout << std::endl;
+        std::cout << "Stack: ";
+        while (!tempStack.empty()) {
             std::cout << " (" << tempStack.top()->tilePosition[0] << "," << tempStack.top()->tilePosition[1] << ") ";
             tempStack.pop();
 
         }
-        std::cout<<std::endl;
-        std::cout<<std::endl;
+        std::cout << std::endl;
+        std::cout << std::endl;
         visitedIndexes.push_back(currentNode);
     }
 
@@ -776,6 +797,7 @@ std::vector<sf::Vector2f> Game::Backtracking(sf::Vector2f start, sf::Vector2f fi
     return path;
 
 }
+
 //función de actualización de mapa
 void Game::updateMap() {
 
@@ -871,6 +893,7 @@ void Game::updateMap() {
     }
 
 }
+
 //función actualizadora de puntos
 void Game::updatePoints() {
 
@@ -881,7 +904,9 @@ void Game::updatePoints() {
 
         if (current->point->getBounds().intersects(this->player->getBounds())) {
             Point *pointPTR = POINTS->removePoint(current->point);
-            pointCounter += 10;
+            if (!gameOver) {
+                pointCounter += 10;
+            }
             delete pointPTR;
 
         }
@@ -889,6 +914,7 @@ void Game::updatePoints() {
     }
 
 }
+
 //función actualizadora de texto
 void Game::updateText() {
 
@@ -896,11 +922,12 @@ void Game::updateText() {
     this->text[1].setString("Points: " + std::to_string(pointCounter));
     this->text[2].setString("Level: " + std::to_string(levelCounter));
     //condicional de finalización de juego
-    if(gameOver){
-        this->text[0].setString("" );
+    if (gameOver) {
+        this->text[0].setString("");
         this->text[2].setString("");
     }
 }
+
 //funcion de rederización de juego
 void Game::renderText() {
 
@@ -909,10 +936,12 @@ void Game::renderText() {
     }
 
 }
+
 //funcion de actualización de posición de jugador como parámetro global
 void Game::updatePlayerPos() {
     this->playerPos = player->getPos();
 }
+
 //función de seguimiento de camino para fantasmas
 void Game::moveToPowerup(Fantasma *fantasma) {
 
@@ -941,6 +970,7 @@ void Game::moveToPowerup(Fantasma *fantasma) {
 
 
 }
+
 //función de actualización de fantasmas
 void Game::updateFantasmas() {
 
@@ -1057,6 +1087,7 @@ void Game::updateFantasmas() {
     }
 
 }
+
 //función auxiliar para métodos de búsqueda
 std::vector<int> Game::getIndex(sf::Vector2f pos) {
 
@@ -1066,6 +1097,7 @@ std::vector<int> Game::getIndex(sf::Vector2f pos) {
     std::vector<int> indexes = {X, Y};
     return indexes;
 }
+
 //función de actualización de juego
 void Game::update() {
 
@@ -1081,12 +1113,14 @@ void Game::update() {
 
 
 }
+
 //funcion de rederización de fantasmas
 void Game::renderFantasmas() {
     for (auto &fantasma: this->fantasmas) {
         fantasma->render(*this->window);
     }
 }
+
 //función de renderización global
 void Game::render() {
 
@@ -1106,6 +1140,7 @@ void Game::render() {
     this->window->display();
 
 }
+
 //función que corre la instancia de juego creada en main
 void Game::run() {
 
