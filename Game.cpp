@@ -1007,8 +1007,8 @@ void Game::updateFantasmas() {
 
             }
             if (fantasma->getBounds().intersects(this->player->getBounds())) {
-                //respawnPlayer();
-                //this->liveCounter--;
+                respawnPlayer();
+                this->liveCounter--;
 
 
             }
