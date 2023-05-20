@@ -967,7 +967,12 @@ void Game::moveToPowerup(Fantasma *fantasma) {
     } else if (fantasma->getPos().y < fantasma->pathToPowerUp[0].y) {
         fantasma->move(0, 1.f);
     }
+    if (fantasma->getBounds().intersects(this->player->getBounds())) {
+        respawnPlayer();
+        this->liveCounter--;
 
+
+    }
 
 }
 
