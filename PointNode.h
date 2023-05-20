@@ -6,7 +6,7 @@
 #define PROYECTO2DATOSII_POINTNODE_H
 
 #include "Point.h"
-
+//clase de nodo de punto en mapa
 class PointNode {
 public:
     PointNode();

@@ -3,14 +3,14 @@
 //
 
 #include "PointLinkedList.h"
-
+//constructor
 PointLinkedList::PointLinkedList() {
     this->head = nullptr;
     size = 0;
 }
-
+//método que agrega punto a la lista
 void PointLinkedList::addFirst(Point *point) {
-
+    //agrega el punto en la cabecera de la lista
     PointNode *newNode = new PointNode(point);
     if (head == nullptr) {
         this->head = newNode;
@@ -21,13 +21,14 @@ void PointLinkedList::addFirst(Point *point) {
     }
     size++;
 }
-
+//método que elimina cabecera de la lista enlazada
 void PointLinkedList::removeFirst() {
 
     if(head == nullptr){
         return ;
 
     }
+
     else{
         PointNode *Temp = head;
         head= head->nextPoint;
@@ -35,7 +36,7 @@ void PointLinkedList::removeFirst() {
         size--;
     }
 }
-
+//método que retorna un puntero a un punto específico en la lista para borrar en el runtime de Game
 Point* PointLinkedList::removePoint(Point *pointToRemove) {
 
     PointNode *current=this->head;
@@ -62,7 +63,7 @@ Point* PointLinkedList::removePoint(Point *pointToRemove) {
         current = current->nextPoint;
     }
 }
-
+//función que renderiza todos los puntos de la lista en el mapa
 void PointLinkedList::renderPointList(sf::RenderTarget& target) {
 
     PointNode * current = this-> head;

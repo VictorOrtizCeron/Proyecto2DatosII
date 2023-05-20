@@ -8,7 +8,7 @@
 
 class Fantasma {
 public:
-
+    //funciones de control de posición y obtención de datos
     Fantasma(int type);
     virtual ~Fantasma();
     const sf::Vector2f& getPos() const;
@@ -18,6 +18,7 @@ public:
     void render(sf::RenderTarget& target);
 
     sf::CircleShape circulo;
+    //booleanos de movimiento para detección de colisiones continua
     bool isMovingLeft;
     bool isMovingRight;
     bool isMovingUp;
@@ -30,7 +31,9 @@ public:
     bool isSearching;
     bool isScattering;
     bool pathMade;
+    //vector de camino asignado hacia powerUp
     std::vector<sf::Vector2f> pathToPowerUp;
+    //tipo de fantasma
     int Type;
 private:
 
