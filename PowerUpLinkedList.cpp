@@ -3,11 +3,12 @@
 //
 
 #include "PowerUpLinkedList.h"
-
+//constructor
 PowerUpLinkedList::PowerUpLinkedList() {
     this->head = nullptr;
     this->size = 0;
 }
+//método que agrega powerup al inicio de la lista
 void PowerUpLinkedList::addFirst(PowerUp *powerUp) {
 
     PowerUpNode *newNode = new PowerUpNode(powerUp);
@@ -20,7 +21,7 @@ void PowerUpLinkedList::addFirst(PowerUp *powerUp) {
     }
     size++;
 }
-
+//método que elimina powerup al inicio de la lista
 void PowerUpLinkedList::removeFirst() {
 
     if(head == nullptr){
@@ -34,6 +35,7 @@ void PowerUpLinkedList::removeFirst() {
         size--;
     }
 }
+//método que elimina punto a powerup específico y lo retorna con el fin de borrarlo en explícitamente en la instancia de Game
 PowerUp* PowerUpLinkedList::removePowerUp(PowerUp *powerToRemove) {
 
     PowerUpNode *current=this->head;
@@ -60,6 +62,7 @@ PowerUp* PowerUpLinkedList::removePowerUp(PowerUp *powerToRemove) {
         current = current->nextPowerUp;
     }
 }
+//función renderizadora de powerups
 void PowerUpLinkedList::renderPowerUpList(sf::RenderTarget& target) {
 
     PowerUpNode * current = this-> head;
